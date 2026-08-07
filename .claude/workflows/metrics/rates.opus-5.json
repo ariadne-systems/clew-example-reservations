@@ -1,0 +1,15 @@
+{
+  "_comment": "USD per million tokens, Claude Opus 5, first-party Claude API. cacheWrite is the 1-hour TTL rate (2x base input); use 6.25 for the 5-minute TTL (1.25x). cacheRead is 0.1x base input. Verify against the current price list before quoting these figures.",
+  "claude-opus-5": {
+    "input": 5.0,
+    "output": 25.0,
+    "cacheWrite": 10.0,
+    "cacheRead": 0.5
+  },
+  "default": {
+    "input": 5.0,
+    "output": 25.0,
+    "cacheWrite": 10.0,
+    "cacheRead": 0.5
+  }
+}
