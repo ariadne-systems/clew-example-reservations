@@ -1,0 +1,3 @@
+minimumReleaseAgeExclude:
+  - '@ariadne-thread/clew'
+  - '@ariadne-thread/trace'

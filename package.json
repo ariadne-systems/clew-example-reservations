@@ -1,0 +1,12 @@
+{
+  "name": "clew-example-reservations",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Reservations example (Java) for working with clew. pnpm is used only to run the clew CLI against this Java project.",
+  "scripts": {
+    "clew": "clew"
+  },
+  "devDependencies": {
+    "@ariadne-thread/clew": "^0.3.0"
+  }
+}

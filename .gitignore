@@ -1,3 +1,7 @@
+# clew: regenerated tool output (state.json stays tracked)
+.clew/locations.json
+.clew/coverage.json
+
 # Local Claude Code settings — never committed
 .claude/settings.local.json
 
@@ -5,3 +9,6 @@
 
 # Maven build output
 target/
+
+# Node / pnpm — clew runs on Node; deps are installed, not committed (pnpm-lock.yaml is)
+node_modules/
