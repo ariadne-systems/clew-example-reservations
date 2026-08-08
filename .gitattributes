@@ -1,0 +1,7 @@
+# Line endings: LF in the repository and on checkout — deterministic across platforms,
+# independent of any contributor's local core.autocrlf setting.
+* text=auto eol=lf
+
+# Windows scripts must stay CRLF.
+*.cmd text eol=crlf
+*.bat text eol=crlf
