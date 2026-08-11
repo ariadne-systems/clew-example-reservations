@@ -9,6 +9,7 @@ import io.example.reservations.entities.Reservation;
 import io.example.reservations.entities.User;
 import io.example.reservations.store.ReservationStore;
 import java.time.Instant;
+import java.util.Set;
 import java.util.stream.Stream;
 
 public final class ClaimCountingQuotaService implements QuotaService {
@@ -35,7 +36,8 @@ public final class ClaimCountingQuotaService implements QuotaService {
     private long activeItemClaimCountOf(User user) {
         Instant currentInstant = clock.now();
         Stream<Item> reservedItems = reservationStore.reservationsOwnedBy(user).stream()
-                .map(Reservation::item);
+                .map(Reservation::items)
+                .flatMap(Set::stream);
         Stream<Item> heldItems = reservationStore.holdsOwnedBy(user).stream()
                 .filter(hold -> hold.isActiveAt(currentInstant))
                 .map(Hold::item);

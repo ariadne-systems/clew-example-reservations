@@ -11,6 +11,7 @@ The system is a single Java library, `reservations`: a set of domain entities, t
 
 An `Item` is a bookable unit.
 A user places a `Hold` to reserve an item tentatively for a `TimeWindow`, then confirms it into a `Reservation` or lets it expire.
+A hold binds one item; a reservation binds one or more, so a set of holds for one window confirms into a single all-or-nothing booking.
 Availability for a window is not stored; it is computed from the active holds and confirmed reservations that bear on it (ADR-0003).
 A quota bounds how much a user may hold and reserve at once.
 
@@ -74,7 +75,9 @@ It does not talk to a spec-authoring agent, to clew, or to `javac` — those are
 The store is the single point of state change (ADR-0002).
 Every operation that changes state does so through the store, which serializes the change and guarantees it is atomic.
 
-An operation serializes on the item it touches, so two operations on the same item never interleave.
+An operation serializes on the store, so two operations on the same item never interleave.
+An operation that touches several items at once — confirming a set of holds into one reservation — is handed to the store as a *single* call and takes that one serialization point once, rather than acquiring a lock per item (ADR-0006).
+No operation therefore ever waits on a second lock, and concurrent confirmations over overlapping items cannot deadlock.
 
 ## Rejections
 

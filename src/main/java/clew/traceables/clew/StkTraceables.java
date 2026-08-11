@@ -12,7 +12,8 @@
 package clew.traceables.clew;
 
 public enum StkTraceables {
-  STK_001_NO_DOUBLE_BOOKING("STK-001");
+  STK_001_NO_DOUBLE_BOOKING("STK-001"),
+  STK_002_ALL_ITEMS_OR_NONE("STK-002");
 
   private final String id;
 

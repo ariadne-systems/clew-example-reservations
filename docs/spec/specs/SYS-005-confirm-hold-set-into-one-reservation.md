@@ -3,7 +3,7 @@ The engine confirms a set of holds into one reservation covering all their items
 
 **Lens**: SYS
 
-**Status**: planned
+**Status**: active
 
 **Description**
 The engine accepts a set of the user's existing holds and confirms them, in one operation, into a single
@@ -30,7 +30,7 @@ users, two windows, a repeated item — is rejected and leaves every hold still 
 
 **Realizes**
 
-- [STK-TMP-001](STK-TMP-001-all-items-or-none.md) — the all-or-nothing promise
+- [STK-002](STK-002-all-items-or-none.md) — the all-or-nothing promise
 
 **Related**
 
@@ -38,4 +38,9 @@ users, two windows, a repeated item — is rejected and leaves every hold still 
 - [SYS-003](SYS-003-place-hold.md) — the holds this capability consumes
 - [SYS-004](SYS-004-cancel-release.md) — cancelling the resulting reservation frees all its items
 - [ENT-004](ENT-004-reservation.md) — the reservation shape that covers one or more items
-- [SW-TMP-001](SW-TMP-001-validate-hold-set-before-one-atomic-change.md) — the service that decides it
+- [SW-005](SW-005-validate-hold-set-before-one-atomic-change.md) — the service that decides it
+
+## Changes
+
+- **2026-08-11** — Set active: work on STR-006 (atomic multi-item bookings) began.
+The spec is being built now, so it must generate a traceable for the implementation and its test to anchor against.

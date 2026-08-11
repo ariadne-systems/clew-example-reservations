@@ -3,7 +3,7 @@ A confirmation takes the store's serialization point once, so concurrent confirm
 
 **Lens**: CON
 
-**Status**: planned
+**Status**: active
 
 **Description**
 A confirmation covering several items applies its whole change in one store operation, taking the store's single
@@ -32,4 +32,9 @@ never as a wrong result.
 
 - [CON-002](CON-002-atomic-confirmation.md) — the same single change is what makes it atomic
 - [ARCH-001](ARCH-001-state-change-through-store.md) — the store is that serialization point
-- [SW-TMP-001](SW-TMP-001-validate-hold-set-before-one-atomic-change.md) — the service that hands over the change
+- [SW-005](SW-005-validate-hold-set-before-one-atomic-change.md) — the service that hands over the change
+
+## Changes
+
+- **2026-08-11** — Set active: work on STR-006 (atomic multi-item bookings) began.
+The spec is being built now, so it must generate a traceable for the implementation and its test to anchor against.

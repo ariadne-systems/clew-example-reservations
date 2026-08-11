@@ -23,7 +23,7 @@ public interface ReservationStore {
 
     void record(Hold hold);
 
-    void replaceHoldWithReservation(Hold hold, Reservation reservation);
+    void replaceHoldsWithReservation(List<Hold> holds, Reservation reservation);
 
     void remove(Reservation reservation);
 

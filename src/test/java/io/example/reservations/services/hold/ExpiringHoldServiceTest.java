@@ -9,7 +9,9 @@ import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
+import clew.traceables.clew.ConTraceables;
 import clew.traceables.clew.SwTraceables;
+import clew.traceables.clew.annotation.VerifiesCon;
 import clew.traceables.clew.annotation.VerifiesSw;
 import io.example.reservations.clock.MutableClock;
 import io.example.reservations.entities.Hold;
@@ -26,6 +28,7 @@ import io.example.reservations.store.ReservationStore;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
+import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -39,11 +42,14 @@ class ExpiringHoldServiceTest {
     private static final User ALICE = new User("alice");
     private static final User BOB = new User("bob");
     private static final Item MEETING_ROOM = new Item("room-1");
+    private static final Item PROJECTOR = new Item("projector-1");
     private static final Instant TEN = Instant.parse("2026-03-01T10:00:00Z");
     private static final Instant QUARTER_PAST_TEN = Instant.parse("2026-03-01T10:15:00Z");
     private static final Instant HALF_PAST_TEN = Instant.parse("2026-03-01T10:30:00Z");
     private static final Instant ELEVEN = Instant.parse("2026-03-01T11:00:00Z");
+    private static final Instant TWELVE = Instant.parse("2026-03-01T12:00:00Z");
     private static final TimeWindow TEN_TO_ELEVEN = new TimeWindow(TEN, ELEVEN);
+    private static final TimeWindow ELEVEN_TO_TWELVE = new TimeWindow(ELEVEN, TWELVE);
 
     @Mock
     private AvailabilityService availabilityServiceMock;
@@ -78,7 +84,7 @@ class ExpiringHoldServiceTest {
     }
 
     @Test
-    @VerifiesSw(SwTraceables.SW_002_HOLD_SERVICE)
+    @VerifiesSw({SwTraceables.SW_002_HOLD_SERVICE, SwTraceables.SW_005_VALIDATE_HOLD_SET_BEFORE_ONE_ATOMIC_CHANGE})
     void a_hold_is_confirmable_while_active_and_stops_being_confirmable_once_the_clock_reaches_its_expiry() {
         Hold hold = new Hold(ALICE, MEETING_ROOM, TEN_TO_ELEVEN, HALF_PAST_TEN);
         when(reservationStoreMock.holdsFor(MEETING_ROOM)).thenReturn(List.of(hold));
@@ -87,7 +93,7 @@ class ExpiringHoldServiceTest {
         Reservation reservation = holdService.confirm(hold);
 
         assertThat(reservation).isEqualTo(new Reservation(ALICE, MEETING_ROOM, TEN_TO_ELEVEN));
-        verify(reservationStoreMock).replaceHoldWithReservation(hold, reservation);
+        verify(reservationStoreMock).replaceHoldsWithReservation(List.of(hold), reservation);
 
         clock.setTo(HALF_PAST_TEN);
         assertThatThrownBy(() -> holdService.confirm(hold)).isInstanceOf(ExpiredHoldException.class);
@@ -156,6 +162,94 @@ class ExpiringHoldServiceTest {
 
         assertThatThrownBy(() -> holdService.confirm(neverPlaced)).isInstanceOf(UnknownHoldException.class);
         verify(reservationStoreMock).holdsFor(MEETING_ROOM);
+        verifyNoMoreInteractions(reservationStoreMock);
+    }
+
+    @Test
+    @VerifiesSw(SwTraceables.SW_005_VALIDATE_HOLD_SET_BEFORE_ONE_ATOMIC_CHANGE)
+    @VerifiesCon({ConTraceables.CON_002_ATOMIC_CONFIRMATION,
+            ConTraceables.CON_004_MULTI_ITEM_CONFIRMATION_NEVER_DEADLOCKS})
+    void a_valid_hold_set_reaches_the_store_as_one_change_consuming_every_hold_for_one_reservation() {
+        Hold meetingRoomHold = new Hold(ALICE, MEETING_ROOM, TEN_TO_ELEVEN, HALF_PAST_TEN);
+        Hold projectorHold = new Hold(ALICE, PROJECTOR, TEN_TO_ELEVEN, HALF_PAST_TEN);
+        when(reservationStoreMock.holdsFor(MEETING_ROOM)).thenReturn(List.of(meetingRoomHold));
+        when(reservationStoreMock.holdsFor(PROJECTOR)).thenReturn(List.of(projectorHold));
+        clock.setTo(QUARTER_PAST_TEN);
+
+        Reservation reservation = holdService.confirm(List.of(meetingRoomHold, projectorHold));
+
+        assertThat(reservation)
+                .isEqualTo(new Reservation(ALICE, Set.of(MEETING_ROOM, PROJECTOR), TEN_TO_ELEVEN));
+        verify(reservationStoreMock).holdsFor(MEETING_ROOM);
+        verify(reservationStoreMock).holdsFor(PROJECTOR);
+        verify(reservationStoreMock)
+                .replaceHoldsWithReservation(List.of(meetingRoomHold, projectorHold), reservation);
+        verifyNoMoreInteractions(reservationStoreMock);
+    }
+
+    @Test
+    @VerifiesSw(SwTraceables.SW_005_VALIDATE_HOLD_SET_BEFORE_ONE_ATOMIC_CHANGE)
+    void an_empty_hold_set_is_rejected_before_the_store_is_touched_at_all() {
+        List<Hold> noHolds = List.of();
+
+        assertThatThrownBy(() -> holdService.confirm(noHolds)).isInstanceOf(InvalidHoldSetException.class);
+        verifyNoInteractions(reservationStoreMock);
+    }
+
+    @Test
+    @VerifiesSw(SwTraceables.SW_005_VALIDATE_HOLD_SET_BEFORE_ONE_ATOMIC_CHANGE)
+    void a_hold_set_belonging_to_two_users_is_rejected_before_the_store_is_touched_at_all() {
+        List<Hold> holdsOfTwoUsers = List.of(new Hold(ALICE, MEETING_ROOM, TEN_TO_ELEVEN, HALF_PAST_TEN),
+                new Hold(BOB, PROJECTOR, TEN_TO_ELEVEN, HALF_PAST_TEN));
+
+        assertThatThrownBy(() -> holdService.confirm(holdsOfTwoUsers)).isInstanceOf(InvalidHoldSetException.class);
+        verifyNoInteractions(reservationStoreMock);
+    }
+
+    @Test
+    @VerifiesSw(SwTraceables.SW_005_VALIDATE_HOLD_SET_BEFORE_ONE_ATOMIC_CHANGE)
+    void a_hold_set_spanning_two_windows_is_rejected_before_the_store_is_touched_at_all() {
+        List<Hold> holdsOfTwoWindows = List.of(new Hold(ALICE, MEETING_ROOM, TEN_TO_ELEVEN, HALF_PAST_TEN),
+                new Hold(ALICE, PROJECTOR, ELEVEN_TO_TWELVE, HALF_PAST_TEN));
+
+        assertThatThrownBy(() -> holdService.confirm(holdsOfTwoWindows)).isInstanceOf(InvalidHoldSetException.class);
+        verifyNoInteractions(reservationStoreMock);
+    }
+
+    @Test
+    @VerifiesSw(SwTraceables.SW_005_VALIDATE_HOLD_SET_BEFORE_ONE_ATOMIC_CHANGE)
+    void a_hold_set_naming_the_same_item_twice_is_rejected_before_the_store_is_touched_at_all() {
+        List<Hold> holdsOfOneItemTwice = List.of(new Hold(ALICE, MEETING_ROOM, TEN_TO_ELEVEN, HALF_PAST_TEN),
+                new Hold(ALICE, MEETING_ROOM, TEN_TO_ELEVEN, ELEVEN));
+
+        assertThatThrownBy(() -> holdService.confirm(holdsOfOneItemTwice)).isInstanceOf(InvalidHoldSetException.class);
+        verifyNoInteractions(reservationStoreMock);
+    }
+
+    @Test
+    @VerifiesCon(ConTraceables.CON_002_ATOMIC_CONFIRMATION)
+    void one_expired_hold_rejects_the_whole_set_and_consumes_none_of_it() {
+        Hold liveHold = new Hold(ALICE, MEETING_ROOM, TEN_TO_ELEVEN, ELEVEN);
+        Hold expiredHold = new Hold(ALICE, PROJECTOR, TEN_TO_ELEVEN, HALF_PAST_TEN);
+        List<Hold> oneOfThemExpired = List.of(liveHold, expiredHold);
+        clock.setTo(HALF_PAST_TEN);
+
+        assertThatThrownBy(() -> holdService.confirm(oneOfThemExpired)).isInstanceOf(ExpiredHoldException.class);
+        verifyNoInteractions(reservationStoreMock);
+    }
+
+    @Test
+    @VerifiesCon(ConTraceables.CON_002_ATOMIC_CONFIRMATION)
+    void one_hold_the_store_does_not_hold_rejects_the_whole_set_and_consumes_none_of_it() {
+        Hold recordedHold = new Hold(ALICE, MEETING_ROOM, TEN_TO_ELEVEN, HALF_PAST_TEN);
+        Hold neverPlaced = new Hold(ALICE, PROJECTOR, TEN_TO_ELEVEN, HALF_PAST_TEN);
+        List<Hold> oneOfThemUnknown = List.of(recordedHold, neverPlaced);
+        when(reservationStoreMock.holdsFor(MEETING_ROOM)).thenReturn(List.of(recordedHold));
+        when(reservationStoreMock.holdsFor(PROJECTOR)).thenReturn(List.of());
+
+        assertThatThrownBy(() -> holdService.confirm(oneOfThemUnknown)).isInstanceOf(UnknownHoldException.class);
+        verify(reservationStoreMock).holdsFor(MEETING_ROOM);
+        verify(reservationStoreMock).holdsFor(PROJECTOR);
         verifyNoMoreInteractions(reservationStoreMock);
     }
 }

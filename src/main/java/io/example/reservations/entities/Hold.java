@@ -10,8 +10,4 @@ public record Hold(User user, Item item, TimeWindow window, Instant expiresAt) {
     public boolean isActiveAt(Instant instant) {
         return instant.isBefore(expiresAt);
     }
-
-    public Reservation toReservation() {
-        return new Reservation(user, item, window);
-    }
 }

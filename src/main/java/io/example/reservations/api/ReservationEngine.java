@@ -14,6 +14,7 @@ import io.example.reservations.services.hold.HoldService;
 import io.example.reservations.services.reservation.ReservationCancellationService;
 import io.example.reservations.services.reservation.ReservationConfirmationService;
 import java.time.Instant;
+import java.util.List;
 
 @RealizesStk(StkTraceables.STK_001_NO_DOUBLE_BOOKING)
 public final class ReservationEngine {
@@ -46,6 +47,12 @@ public final class ReservationEngine {
     @RealizesSys(SysTraceables.SYS_003_PLACE_HOLD)
     public Reservation confirmHold(Hold hold) {
         return holdService.confirm(hold);
+    }
+
+    @RealizesSys(SysTraceables.SYS_005_CONFIRM_HOLD_SET_INTO_ONE_RESERVATION)
+    @RealizesStk(StkTraceables.STK_002_ALL_ITEMS_OR_NONE)
+    public Reservation confirmHolds(List<Hold> holds) {
+        return holdService.confirm(holds);
     }
 
     @RealizesSys(SysTraceables.SYS_004_CANCEL_RELEASE)

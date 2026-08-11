@@ -14,7 +14,8 @@ package clew.traceables.clew;
 public enum ConTraceables {
   CON_001_NO_DOUBLE_BOOKING("CON-001"),
   CON_002_ATOMIC_CONFIRMATION("CON-002"),
-  CON_003_QUOTA_BOUND("CON-003");
+  CON_003_QUOTA_BOUND("CON-003"),
+  CON_004_MULTI_ITEM_CONFIRMATION_NEVER_DEADLOCKS("CON-004");
 
   private final String id;
 

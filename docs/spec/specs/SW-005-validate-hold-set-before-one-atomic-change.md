@@ -3,7 +3,7 @@ Hold-service checks the whole hold set before handing the store one atomic chang
 
 **Lens**: SW
 
-**Status**: planned
+**Status**: active
 
 **Description**
 The hold service confirms a set of holds only after checking the entire set: it is non-empty, every hold is still
@@ -36,14 +36,19 @@ confirmation is asserted to take the same path.
 
 **Realizes**
 
-- [SYS-TMP-001](SYS-TMP-001-confirm-hold-set-into-one-reservation.md) — the engine capability
+- [SYS-005](SYS-005-confirm-hold-set-into-one-reservation.md) — the engine capability
 
 **Related**
 
 - [SW-002](SW-002-hold-service.md) — the hold lifecycle this extends
 - [CON-002](CON-002-atomic-confirmation.md) — the all-or-nothing invariant it must keep
 - [CON-003](CON-003-quota-bound.md) — unchanged by a confirmation, which is why no quota check is made
-- [CON-TMP-001](CON-TMP-001-multi-item-confirmation-never-deadlocks.md) — the contention rule for the change it hands over
+- [CON-004](CON-004-multi-item-confirmation-never-deadlocks.md) — the contention rule for the change it hands over
 - [ENT-004](ENT-004-reservation.md) — the reservation it records
 - [ENT-005](ENT-005-hold.md) — the holds it consumes
 - [ARCH-001](ARCH-001-state-change-through-store.md) — the store owns the change
+
+## Changes
+
+- **2026-08-11** — Set active: work on STR-006 (atomic multi-item bookings) began.
+The spec is being built now, so it must generate a traceable for the implementation and its test to anchor against.

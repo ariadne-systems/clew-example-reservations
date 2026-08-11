@@ -1,7 +1,7 @@
 **Title**
 Atomic multi-item bookings
 
-**Status**: planned
+**Status**: done
 
 **Business Value**
 A user can reserve several items together for one window as a single atomic booking — either all of them or none,
@@ -43,10 +43,10 @@ concurrent confirmations over overlapping items cannot deadlock.
 
 **Realizes**
 
-- [STK-TMP-001](../specs/STK-TMP-001-all-items-or-none.md) — the all-or-nothing promise this story delivers
-- [SYS-TMP-001](../specs/SYS-TMP-001-confirm-hold-set-into-one-reservation.md) — the engine capability
-- [SW-TMP-001](../specs/SW-TMP-001-validate-hold-set-before-one-atomic-change.md) — the service behaviour
-- [CON-TMP-001](../specs/CON-TMP-001-multi-item-confirmation-never-deadlocks.md) — the contention invariant
+- [STK-002](../specs/STK-002-all-items-or-none.md) — the all-or-nothing promise this story delivers
+- [SYS-005](../specs/SYS-005-confirm-hold-set-into-one-reservation.md) — the engine capability
+- [SW-005](../specs/SW-005-validate-hold-set-before-one-atomic-change.md) — the service behaviour
+- [CON-004](../specs/CON-004-multi-item-confirmation-never-deadlocks.md) — the contention invariant
 
 **Related**
 

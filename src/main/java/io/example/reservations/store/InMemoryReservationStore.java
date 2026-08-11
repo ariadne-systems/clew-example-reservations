@@ -1,7 +1,9 @@
 package io.example.reservations.store;
 
 import clew.traceables.clew.ArchTraceables;
+import clew.traceables.clew.ConTraceables;
 import clew.traceables.clew.annotation.RealizesArch;
+import clew.traceables.clew.annotation.RealizesCon;
 import io.example.reservations.entities.Hold;
 import io.example.reservations.entities.Item;
 import io.example.reservations.entities.Reservation;
@@ -46,7 +48,7 @@ public final class InMemoryReservationStore implements ReservationStore {
     @Override
     @MutatesState
     public synchronized void record(Reservation reservation) {
-        reservationsByItem.computeIfAbsent(reservation.item(), reservedItem -> new ArrayList<>()).add(reservation);
+        addToEveryItemOf(reservation);
     }
 
     @Override
@@ -57,15 +59,24 @@ public final class InMemoryReservationStore implements ReservationStore {
 
     @Override
     @MutatesState
-    public synchronized void replaceHoldWithReservation(Hold hold, Reservation reservation) {
-        holdsByItem.getOrDefault(hold.item(), new ArrayList<>()).remove(hold);
-        reservationsByItem.computeIfAbsent(reservation.item(), reservedItem -> new ArrayList<>()).add(reservation);
+    @RealizesCon(ConTraceables.CON_004_MULTI_ITEM_CONFIRMATION_NEVER_DEADLOCKS)
+    public synchronized void replaceHoldsWithReservation(List<Hold> holds, Reservation reservation) {
+        holds.forEach(hold -> holdsByItem.getOrDefault(hold.item(), new ArrayList<>()).remove(hold));
+        addToEveryItemOf(reservation);
     }
 
     @Override
     @MutatesState
     public synchronized void remove(Reservation reservation) {
-        reservationsByItem.getOrDefault(reservation.item(), new ArrayList<>()).remove(reservation);
+        reservation.items()
+                .forEach(reservedItem -> reservationsByItem.getOrDefault(reservedItem, new ArrayList<>())
+                        .remove(reservation));
+    }
+
+    private void addToEveryItemOf(Reservation reservation) {
+        reservation.items()
+                .forEach(reservedItem -> reservationsByItem.computeIfAbsent(reservedItem, item -> new ArrayList<>())
+                        .add(reservation));
     }
 
     @Override

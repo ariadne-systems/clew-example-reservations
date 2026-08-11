@@ -8,6 +8,8 @@ import io.example.reservations.entities.Reservation;
 import io.example.reservations.entities.TimeWindow;
 import io.example.reservations.entities.User;
 import java.time.Instant;
+import java.util.List;
+import java.util.Set;
 import org.junit.jupiter.api.Test;
 
 class InMemoryReservationStoreTest {
@@ -56,12 +58,39 @@ class InMemoryReservationStoreTest {
     void replacing_a_hold_drops_it_and_records_the_reservation_in_one_change() {
         Hold hold = new Hold(ALICE, MEETING_ROOM, TEN_TO_ELEVEN, HALF_PAST_NINE);
         reservationStore.record(hold);
-        Reservation reservation = hold.toReservation();
+        Reservation reservation = new Reservation(ALICE, MEETING_ROOM, TEN_TO_ELEVEN);
 
-        reservationStore.replaceHoldWithReservation(hold, reservation);
+        reservationStore.replaceHoldsWithReservation(List.of(hold), reservation);
 
         assertThat(reservationStore.holdsFor(MEETING_ROOM)).isEmpty();
         assertThat(reservationStore.reservationsFor(MEETING_ROOM)).containsExactly(reservation);
+    }
+
+    @Test
+    void replacing_a_set_of_holds_drops_every_one_of_them_and_records_the_reservation_under_each_of_its_items() {
+        Hold meetingRoomHold = new Hold(ALICE, MEETING_ROOM, TEN_TO_ELEVEN, HALF_PAST_NINE);
+        Hold workshopHold = new Hold(ALICE, WORKSHOP, TEN_TO_ELEVEN, HALF_PAST_NINE);
+        reservationStore.record(meetingRoomHold);
+        reservationStore.record(workshopHold);
+        Reservation reservation = new Reservation(ALICE, Set.of(MEETING_ROOM, WORKSHOP), TEN_TO_ELEVEN);
+
+        reservationStore.replaceHoldsWithReservation(List.of(meetingRoomHold, workshopHold), reservation);
+
+        assertThat(reservationStore.holdsFor(MEETING_ROOM)).isEmpty();
+        assertThat(reservationStore.holdsFor(WORKSHOP)).isEmpty();
+        assertThat(reservationStore.reservationsFor(MEETING_ROOM)).containsExactly(reservation);
+        assertThat(reservationStore.reservationsFor(WORKSHOP)).containsExactly(reservation);
+    }
+
+    @Test
+    void a_multi_item_reservation_is_removed_from_every_one_of_its_items() {
+        Reservation reservation = new Reservation(ALICE, Set.of(MEETING_ROOM, WORKSHOP), TEN_TO_ELEVEN);
+        reservationStore.record(reservation);
+
+        reservationStore.remove(reservation);
+
+        assertThat(reservationStore.reservationsFor(MEETING_ROOM)).isEmpty();
+        assertThat(reservationStore.reservationsFor(WORKSHOP)).isEmpty();
     }
 
     @Test
@@ -119,9 +148,9 @@ class InMemoryReservationStoreTest {
     @Test
     void replacing_a_hold_the_store_never_recorded_still_records_only_the_reservation() {
         Hold neverRecorded = new Hold(ALICE, WORKSHOP, TEN_TO_ELEVEN, HALF_PAST_NINE);
-        Reservation reservation = neverRecorded.toReservation();
+        Reservation reservation = new Reservation(ALICE, WORKSHOP, TEN_TO_ELEVEN);
 
-        reservationStore.replaceHoldWithReservation(neverRecorded, reservation);
+        reservationStore.replaceHoldsWithReservation(List.of(neverRecorded), reservation);
 
         assertThat(reservationStore.holdsFor(WORKSHOP)).isEmpty();
         assertThat(reservationStore.reservationsFor(WORKSHOP)).containsExactly(reservation);

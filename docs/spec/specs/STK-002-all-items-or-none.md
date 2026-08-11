@@ -3,7 +3,7 @@ A group of items is booked all together or not at all
 
 **Lens**: STK
 
-**Status**: planned
+**Status**: active
 
 **Description**
 When a user needs several items for the same window, the booking is a single unit: the user gets every item or no
@@ -28,5 +28,10 @@ one of the user's prior claims exactly as it was, with nothing booked.
 **Related**
 
 - [STK-001](STK-001-no-double-booking.md) — the promise a multi-item booking must not break
-- [SYS-TMP-001](SYS-TMP-001-confirm-hold-set-into-one-reservation.md) — the engine capability that keeps this promise
+- [SYS-005](SYS-005-confirm-hold-set-into-one-reservation.md) — the engine capability that keeps this promise
 - [CON-002](CON-002-atomic-confirmation.md) — the invariant that makes all-or-nothing observable
+
+## Changes
+
+- **2026-08-11** — Set active: work on STR-006 (atomic multi-item bookings) began.
+The spec is being built now, so it must generate a traceable for the implementation and its test to anchor against.

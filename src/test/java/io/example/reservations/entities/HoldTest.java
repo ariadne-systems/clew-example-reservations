@@ -43,10 +43,4 @@ class HoldTest {
         assertThat(hold.expiresAt()).isEqualTo(HALF_PAST_TEN);
     }
 
-    @Test
-    void a_confirmed_hold_becomes_a_reservation_binding_the_same_user_item_and_window() {
-        Hold hold = new Hold(ALICE, MEETING_ROOM, TEN_TO_ELEVEN, HALF_PAST_TEN);
-
-        assertThat(hold.toReservation()).isEqualTo(new Reservation(ALICE, MEETING_ROOM, TEN_TO_ELEVEN));
-    }
 }
