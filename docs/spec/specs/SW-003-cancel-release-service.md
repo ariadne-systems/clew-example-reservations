@@ -3,7 +3,7 @@ Cancel/release service verifies ownership before handing the release to the stor
 
 **Lens**: SW
 
-**Status**: planned
+**Status**: active
 
 **Description**
 The service permits a cancellation or release only when the requesting user owns the reservation or hold; on
@@ -21,7 +21,7 @@ atomic release and restores availability.
 
 **Realizes**
 
-- [SYS-TMP-001](SYS-TMP-001-cancel-release.md)
+- [SYS-004](SYS-004-cancel-release.md)
 
 **Related**
 
@@ -29,4 +29,9 @@ atomic release and restores availability.
 - [ENT-004](ENT-004-reservation.md)
 - [ENT-005](ENT-005-hold.md)
 - [ARCH-001](ARCH-001-state-change-through-store.md)
+
+## Changes
+
+- **2026-08-11** — Set active: work on STR-004 (owner-initiated cancellation and release) began.
+The spec is being built now, so it must generate a traceable for the implementation and its test to anchor against.
 </content>

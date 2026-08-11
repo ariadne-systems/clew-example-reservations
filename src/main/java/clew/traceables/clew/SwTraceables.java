@@ -13,7 +13,8 @@ package clew.traceables.clew;
 
 public enum SwTraceables {
   SW_001_CONFIRM_SERVICE("SW-001"),
-  SW_002_HOLD_SERVICE("SW-002");
+  SW_002_HOLD_SERVICE("SW-002"),
+  SW_003_CANCEL_RELEASE_SERVICE("SW-003");
 
   private final String id;
 

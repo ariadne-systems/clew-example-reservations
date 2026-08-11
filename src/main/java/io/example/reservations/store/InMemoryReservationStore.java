@@ -44,4 +44,16 @@ public final class InMemoryReservationStore implements ReservationStore {
         holdsByItem.getOrDefault(hold.item(), new ArrayList<>()).remove(hold);
         reservationsByItem.computeIfAbsent(reservation.item(), reservedItem -> new ArrayList<>()).add(reservation);
     }
+
+    @Override
+    @MutatesState
+    public synchronized void remove(Reservation reservation) {
+        reservationsByItem.getOrDefault(reservation.item(), new ArrayList<>()).remove(reservation);
+    }
+
+    @Override
+    @MutatesState
+    public synchronized void remove(Hold hold) {
+        holdsByItem.getOrDefault(hold.item(), new ArrayList<>()).remove(hold);
+    }
 }

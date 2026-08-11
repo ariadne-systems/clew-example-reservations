@@ -21,6 +21,7 @@ import io.example.reservations.entities.User;
 import io.example.reservations.services.hold.ExpiredHoldException;
 import io.example.reservations.services.hold.UnknownHoldException;
 import io.example.reservations.services.reservation.ItemUnavailableException;
+import io.example.reservations.services.reservation.NotClaimOwnerException;
 import java.time.Instant;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -182,6 +183,38 @@ class ReservationEngineAcceptanceTest {
 
         assertThat(reservationEngine.confirm(BOB, WORKSHOP, TEN_TO_ELEVEN))
                 .isEqualTo(new Reservation(BOB, WORKSHOP, TEN_TO_ELEVEN));
+    }
+
+    @Test
+    @VerifiesSys(SysTraceables.SYS_004_CANCEL_RELEASE)
+    void cancelling_a_reservation_frees_its_window_for_others_and_only_its_owner_may_cancel_it() {
+        Reservation reservation = reservationEngine.confirm(ALICE, MEETING_ROOM, TEN_TO_ELEVEN);
+
+        assertThatThrownBy(() -> reservationEngine.cancel(BOB, reservation))
+                .isInstanceOf(NotClaimOwnerException.class);
+        assertThat(reservationEngine.isAvailable(MEETING_ROOM, TEN_TO_ELEVEN)).isFalse();
+
+        reservationEngine.cancel(ALICE, reservation);
+
+        assertThat(reservationEngine.isAvailable(MEETING_ROOM, TEN_TO_ELEVEN)).isTrue();
+        assertThat(reservationEngine.confirm(BOB, MEETING_ROOM, TEN_TO_ELEVEN))
+                .isEqualTo(new Reservation(BOB, MEETING_ROOM, TEN_TO_ELEVEN));
+    }
+
+    @Test
+    @VerifiesSys(SysTraceables.SYS_004_CANCEL_RELEASE)
+    void releasing_an_active_hold_frees_its_window_for_others_and_only_its_owner_may_release_it() {
+        Hold hold = reservationEngine.placeHold(ALICE, MEETING_ROOM, TEN_TO_ELEVEN, HALF_PAST_NINE);
+
+        assertThatThrownBy(() -> reservationEngine.release(BOB, hold))
+                .isInstanceOf(NotClaimOwnerException.class);
+        assertThat(reservationEngine.isAvailable(MEETING_ROOM, HALF_PAST_TEN_TO_TWELVE)).isFalse();
+
+        reservationEngine.release(ALICE, hold);
+
+        assertThat(reservationEngine.isAvailable(MEETING_ROOM, HALF_PAST_TEN_TO_TWELVE)).isTrue();
+        assertThat(reservationEngine.confirm(BOB, MEETING_ROOM, TEN_TO_ELEVEN))
+                .isEqualTo(new Reservation(BOB, MEETING_ROOM, TEN_TO_ELEVEN));
     }
 
     @Test

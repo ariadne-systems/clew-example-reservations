@@ -14,6 +14,7 @@ import io.example.reservations.entities.TimeWindow;
 import io.example.reservations.entities.User;
 import io.example.reservations.services.availability.AvailabilityService;
 import io.example.reservations.services.reservation.ItemUnavailableException;
+import io.example.reservations.services.reservation.NotClaimOwnerException;
 import io.example.reservations.store.ReservationStore;
 import java.time.Instant;
 
@@ -64,5 +65,19 @@ public final class ExpiringHoldService implements HoldService {
         Reservation reservation = hold.toReservation();
         reservationStore.replaceHoldWithReservation(hold, reservation);
         return reservation;
+    }
+
+    @Override
+    @RealizesSw(SwTraceables.SW_003_CANCEL_RELEASE_SERVICE)
+    public void release(User user, Hold hold) {
+        if (!hold.user().equals(user)) {
+            throw new NotClaimOwnerException("User %s does not hold the hold on item %s for [%s, %s)"
+                    .formatted(user.id(), hold.item().id(), hold.window().start(), hold.window().end()));
+        }
+        if (!reservationStore.holdsFor(hold.item()).contains(hold)) {
+            throw new UnknownHoldException("No such hold on item %s for [%s, %s)"
+                    .formatted(hold.item().id(), hold.window().start(), hold.window().end()));
+        }
+        reservationStore.remove(hold);
     }
 }

@@ -62,6 +62,37 @@ class InMemoryReservationStoreTest {
     }
 
     @Test
+    void a_removed_reservation_is_no_longer_returned_for_its_item() {
+        Reservation reservation = new Reservation(ALICE, MEETING_ROOM, TEN_TO_ELEVEN);
+        reservationStore.record(reservation);
+
+        reservationStore.remove(reservation);
+
+        assertThat(reservationStore.reservationsFor(MEETING_ROOM)).isEmpty();
+    }
+
+    @Test
+    void a_removed_hold_is_no_longer_returned_for_its_item() {
+        Hold hold = new Hold(ALICE, MEETING_ROOM, TEN_TO_ELEVEN, HALF_PAST_NINE);
+        reservationStore.record(hold);
+
+        reservationStore.remove(hold);
+
+        assertThat(reservationStore.holdsFor(MEETING_ROOM)).isEmpty();
+    }
+
+    @Test
+    void removing_a_claim_the_store_never_recorded_leaves_the_other_claims_untouched() {
+        Reservation reservation = new Reservation(ALICE, MEETING_ROOM, TEN_TO_ELEVEN);
+        reservationStore.record(reservation);
+
+        reservationStore.remove(new Reservation(ALICE, WORKSHOP, TEN_TO_ELEVEN));
+        reservationStore.remove(new Hold(ALICE, WORKSHOP, TEN_TO_ELEVEN, HALF_PAST_NINE));
+
+        assertThat(reservationStore.reservationsFor(MEETING_ROOM)).containsExactly(reservation);
+    }
+
+    @Test
     void replacing_a_hold_the_store_never_recorded_still_records_only_the_reservation() {
         Hold neverRecorded = new Hold(ALICE, WORKSHOP, TEN_TO_ELEVEN, HALF_PAST_NINE);
         Reservation reservation = neverRecorded.toReservation();

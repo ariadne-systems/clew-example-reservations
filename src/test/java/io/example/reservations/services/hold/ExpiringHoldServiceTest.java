@@ -18,6 +18,7 @@ import io.example.reservations.entities.TimeWindow;
 import io.example.reservations.entities.User;
 import io.example.reservations.services.availability.AvailabilityService;
 import io.example.reservations.services.reservation.ItemUnavailableException;
+import io.example.reservations.services.reservation.NotClaimOwnerException;
 import io.example.reservations.store.ReservationStore;
 import java.time.Duration;
 import java.time.Instant;
@@ -33,6 +34,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class ExpiringHoldServiceTest {
 
     private static final User ALICE = new User("alice");
+    private static final User BOB = new User("bob");
     private static final Item MEETING_ROOM = new Item("room-1");
     private static final Instant TEN = Instant.parse("2026-03-01T10:00:00Z");
     private static final Instant QUARTER_PAST_TEN = Instant.parse("2026-03-01T10:15:00Z");
@@ -102,6 +104,33 @@ class ExpiringHoldServiceTest {
         assertThatThrownBy(() -> holdService.place(ALICE, MEETING_ROOM, TEN_TO_ELEVEN, TEN))
                 .isInstanceOf(IllegalArgumentException.class);
         verifyNoInteractions(availabilityServiceMock, reservationStoreMock);
+    }
+
+    @Test
+    @VerifiesSw(SwTraceables.SW_003_CANCEL_RELEASE_SERVICE)
+    void a_user_who_does_not_hold_the_hold_changes_nothing_while_its_owner_hands_one_removal_to_the_store() {
+        Hold hold = new Hold(ALICE, MEETING_ROOM, TEN_TO_ELEVEN, HALF_PAST_TEN);
+
+        assertThatThrownBy(() -> holdService.release(BOB, hold)).isInstanceOf(NotClaimOwnerException.class);
+        verifyNoInteractions(reservationStoreMock);
+
+        when(reservationStoreMock.holdsFor(MEETING_ROOM)).thenReturn(List.of(hold));
+
+        holdService.release(ALICE, hold);
+
+        verify(reservationStoreMock).holdsFor(MEETING_ROOM);
+        verify(reservationStoreMock).remove(hold);
+        verifyNoMoreInteractions(reservationStoreMock);
+    }
+
+    @Test
+    void a_hold_the_store_does_not_hold_cannot_be_released_and_leaves_the_store_unchanged() {
+        Hold neverPlaced = new Hold(ALICE, MEETING_ROOM, TEN_TO_ELEVEN, HALF_PAST_TEN);
+        when(reservationStoreMock.holdsFor(MEETING_ROOM)).thenReturn(List.of());
+
+        assertThatThrownBy(() -> holdService.release(ALICE, neverPlaced)).isInstanceOf(UnknownHoldException.class);
+        verify(reservationStoreMock).holdsFor(MEETING_ROOM);
+        verifyNoMoreInteractions(reservationStoreMock);
     }
 
     @Test

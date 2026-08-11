@@ -3,7 +3,7 @@ The engine lets the owning user cancel a reservation or release a hold, restorin
 
 **Lens**: SYS
 
-**Status**: planned
+**Status**: active
 
 **Description**
 The owning user can cancel their confirmed reservation or release their active hold; either makes the item
@@ -24,5 +24,10 @@ is rejected; releasing an active hold has the same effect.
 
 - [ENT-004](ENT-004-reservation.md)
 - [ENT-005](ENT-005-hold.md)
-- [SW-TMP-001](SW-TMP-001-cancel-release-service.md)
+- [SW-003](SW-003-cancel-release-service.md)
+
+## Changes
+
+- **2026-08-11** — Set active: work on STR-004 (owner-initiated cancellation and release) began.
+The spec is being built now, so it must generate a traceable for the implementation and its test to anchor against.
 </content>

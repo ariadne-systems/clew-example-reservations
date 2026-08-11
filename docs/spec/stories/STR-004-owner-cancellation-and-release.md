@@ -1,7 +1,7 @@
 **Title**
 Owner-initiated cancellation and release
 
-**Status**: planned
+**Status**: done
 
 **Business Value**
 A user who no longer needs an item can hand it back: cancelling a reservation or releasing a hold makes the item
@@ -34,8 +34,8 @@ Cancellation and release go through the store and are atomic (ADR-0002).
 
 **Realizes**
 
-- [SYS-TMP-001](../specs/SYS-TMP-001-cancel-release.md)
-- [SW-TMP-001](../specs/SW-TMP-001-cancel-release-service.md)
+- [SYS-004](../specs/SYS-004-cancel-release.md)
+- [SW-003](../specs/SW-003-cancel-release-service.md)
 
 **Related**
 

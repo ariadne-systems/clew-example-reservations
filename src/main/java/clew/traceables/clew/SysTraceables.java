@@ -14,7 +14,8 @@ package clew.traceables.clew;
 public enum SysTraceables {
   SYS_001_CONFIRM_RESERVATION("SYS-001"),
   SYS_002_AVAILABILITY_QUERY("SYS-002"),
-  SYS_003_PLACE_HOLD("SYS-003");
+  SYS_003_PLACE_HOLD("SYS-003"),
+  SYS_004_CANCEL_RELEASE("SYS-004");
 
   private final String id;
 

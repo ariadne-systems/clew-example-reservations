@@ -12,4 +12,6 @@ public interface HoldService {
     Hold place(User user, Item item, TimeWindow window, Instant expiresAt);
 
     Reservation confirm(Hold hold);
+
+    void release(User user, Hold hold);
 }

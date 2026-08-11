@@ -19,4 +19,8 @@ public interface ReservationStore {
     void record(Hold hold);
 
     void replaceHoldWithReservation(Hold hold, Reservation reservation);
+
+    void remove(Reservation reservation);
+
+    void remove(Hold hold);
 }
