@@ -32,6 +32,7 @@ class ReservationEngineAcceptanceTest {
     private static final User ALICE = new User("alice");
     private static final User BOB = new User("bob");
     private static final User CARLA_ON_A_QUOTA_OF_TWO = new User("carla", 2);
+    private static final User DEREK_ON_A_QUOTA_OF_ONE = new User("derek", 1);
     private static final Item MEETING_ROOM = new Item("room-1");
     private static final Item WORKSHOP = new Item("room-2");
     private static final Item LIBRARY = new Item("room-3");
@@ -265,8 +266,10 @@ class ReservationEngineAcceptanceTest {
 
         assertThatThrownBy(() -> reservationEngine.confirm(CARLA_ON_A_QUOTA_OF_TWO, LIBRARY, TEN_TO_ELEVEN))
                 .isInstanceOf(QuotaExceededException.class);
-        assertThat(reservationEngine.confirm(ALICE, LIBRARY, TEN_TO_ELEVEN))
-                .isEqualTo(new Reservation(ALICE, LIBRARY, TEN_TO_ELEVEN));
+        assertThat(reservationEngine.confirm(DEREK_ON_A_QUOTA_OF_ONE, LIBRARY, TEN_TO_ELEVEN))
+                .isEqualTo(new Reservation(DEREK_ON_A_QUOTA_OF_ONE, LIBRARY, TEN_TO_ELEVEN));
+        assertThatThrownBy(() -> reservationEngine.confirm(DEREK_ON_A_QUOTA_OF_ONE, MEETING_ROOM, ELEVEN_TO_TWELVE))
+                .isInstanceOf(QuotaExceededException.class);
     }
 
     @Test
