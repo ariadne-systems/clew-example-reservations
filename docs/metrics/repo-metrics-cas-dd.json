@@ -1,0 +1,953 @@
+{
+  "label": "cas-dd",
+  "collectedAt": "2026-08-11T15:26:40.277Z",
+  "repoRoot": "C:\\develop\\intellij-installations\\clew-example-reservations2",
+  "range": "31e9ab2c2331a201106d46981035d851e0622421..HEAD",
+  "head": "ed04b10",
+  "branch": "main",
+  "commitCount": 18,
+  "increments": [
+    {
+      "increment": "STR-1",
+      "commits": [
+        {
+          "short": "c92f51e",
+          "subject": "chore: scaffold clew and draft set-up-the-workspace (STR-1)",
+          "date": "2026-08-11T14:37:27+02:00",
+          "kind": "draft",
+          "filesChanged": 28,
+          "insertions": 1903,
+          "deletions": 0,
+          "byClass": {
+            "governance": {
+              "files": 15,
+              "insertions": 1426,
+              "deletions": 0
+            },
+            "build": {
+              "files": 1,
+              "insertions": 67,
+              "deletions": 0
+            },
+            "adr": {
+              "files": 6,
+              "insertions": 111,
+              "deletions": 0
+            },
+            "spec-scaffold": {
+              "files": 5,
+              "insertions": 261,
+              "deletions": 0
+            },
+            "spec": {
+              "files": 1,
+              "insertions": 38,
+              "deletions": 0
+            }
+          }
+        },
+        {
+          "short": "6349fff",
+          "subject": "feat: stand up the reservations workspace (STR-1)",
+          "date": "2026-08-11T14:43:14+02:00",
+          "kind": "implement",
+          "filesChanged": 18,
+          "insertions": 775,
+          "deletions": 1,
+          "byClass": {
+            "other": {
+              "files": 1,
+              "insertions": 5,
+              "deletions": 0
+            },
+            "build": {
+              "files": 4,
+              "insertions": 634,
+              "deletions": 0
+            },
+            "spec-scaffold": {
+              "files": 1,
+              "insertions": 1,
+              "deletions": 1
+            },
+            "generated": {
+              "files": 1,
+              "insertions": 28,
+              "deletions": 0
+            },
+            "production": {
+              "files": 9,
+              "insertions": 48,
+              "deletions": 0
+            },
+            "test": {
+              "files": 2,
+              "insertions": 59,
+              "deletions": 0
+            }
+          }
+        },
+        {
+          "short": "711180e",
+          "subject": "fix: review (STR-1 set up workspace)",
+          "date": "2026-08-11T14:52:26+02:00",
+          "kind": "other",
+          "filesChanged": 1,
+          "insertions": 0,
+          "deletions": 0,
+          "byClass": {
+            "build": {
+              "files": 1,
+              "insertions": 0,
+              "deletions": 0
+            }
+          }
+        }
+      ],
+      "commitCount": 3,
+      "firstCommitAt": "2026-08-11T14:37:27+02:00",
+      "lastCommitAt": "2026-08-11T14:52:26+02:00",
+      "insertions": 2678,
+      "deletions": 1,
+      "byClass": {
+        "governance": {
+          "files": 15,
+          "insertions": 1426,
+          "deletions": 0
+        },
+        "build": {
+          "files": 6,
+          "insertions": 701,
+          "deletions": 0
+        },
+        "adr": {
+          "files": 6,
+          "insertions": 111,
+          "deletions": 0
+        },
+        "spec-scaffold": {
+          "files": 6,
+          "insertions": 262,
+          "deletions": 1
+        },
+        "spec": {
+          "files": 1,
+          "insertions": 38,
+          "deletions": 0
+        },
+        "other": {
+          "files": 1,
+          "insertions": 5,
+          "deletions": 0
+        },
+        "generated": {
+          "files": 1,
+          "insertions": 28,
+          "deletions": 0
+        },
+        "production": {
+          "files": 9,
+          "insertions": 48,
+          "deletions": 0
+        },
+        "test": {
+          "files": 2,
+          "insertions": 59,
+          "deletions": 0
+        }
+      },
+      "byKind": {
+        "draft": {
+          "commits": 1,
+          "insertions": 1903,
+          "deletions": 0
+        },
+        "implement": {
+          "commits": 1,
+          "insertions": 775,
+          "deletions": 1
+        },
+        "other": {
+          "commits": 1,
+          "insertions": 0,
+          "deletions": 0
+        }
+      },
+      "snapshot": {
+        "productionFiles": 9,
+        "productionLines": 57,
+        "testFiles": 1,
+        "testLines": 59,
+        "generatedFiles": 1,
+        "generatedLines": 29,
+        "specFiles": 1,
+        "specLines": 39,
+        "adrFiles": 6,
+        "testMethods": 0,
+        "realizesAnchors": 0,
+        "verifiesAnchors": 0,
+        "concernsAnchors": 0
+      }
+    },
+    {
+      "increment": "STR-2",
+      "commits": [
+        {
+          "short": "2b09e72",
+          "subject": "docs: draft reserve-single-item (STR-2)",
+          "date": "2026-08-11T14:59:06+02:00",
+          "kind": "draft",
+          "filesChanged": 14,
+          "insertions": 411,
+          "deletions": 0,
+          "byClass": {
+            "spec": {
+              "files": 14,
+              "insertions": 411,
+              "deletions": 0
+            }
+          }
+        },
+        {
+          "short": "2819736",
+          "subject": "feat: implement reserve-single-item (STR-2)",
+          "date": "2026-08-11T15:10:34+02:00",
+          "kind": "implement",
+          "filesChanged": 65,
+          "insertions": 1606,
+          "deletions": 61,
+          "byClass": {
+            "other": {
+              "files": 1,
+              "insertions": 7,
+              "deletions": 1
+            },
+            "spec-scaffold": {
+              "files": 14,
+              "insertions": 124,
+              "deletions": 59
+            },
+            "generated": {
+              "files": 25,
+              "insertions": 812,
+              "deletions": 1
+            },
+            "production": {
+              "files": 16,
+              "insertions": 242,
+              "deletions": 0
+            },
+            "test": {
+              "files": 9,
+              "insertions": 421,
+              "deletions": 0
+            }
+          }
+        },
+        {
+          "short": "9c1a49a",
+          "subject": "fix: review (STR-2 reserve single item)",
+          "date": "2026-08-11T15:24:54+02:00",
+          "kind": "other",
+          "filesChanged": 3,
+          "insertions": 21,
+          "deletions": 2,
+          "byClass": {
+            "production": {
+              "files": 2,
+              "insertions": 1,
+              "deletions": 1
+            },
+            "test": {
+              "files": 1,
+              "insertions": 20,
+              "deletions": 1
+            }
+          }
+        }
+      ],
+      "commitCount": 3,
+      "firstCommitAt": "2026-08-11T14:59:06+02:00",
+      "lastCommitAt": "2026-08-11T15:24:54+02:00",
+      "insertions": 2038,
+      "deletions": 63,
+      "byClass": {
+        "spec": {
+          "files": 14,
+          "insertions": 411,
+          "deletions": 0
+        },
+        "other": {
+          "files": 1,
+          "insertions": 7,
+          "deletions": 1
+        },
+        "spec-scaffold": {
+          "files": 14,
+          "insertions": 124,
+          "deletions": 59
+        },
+        "generated": {
+          "files": 25,
+          "insertions": 812,
+          "deletions": 1
+        },
+        "production": {
+          "files": 18,
+          "insertions": 243,
+          "deletions": 1
+        },
+        "test": {
+          "files": 10,
+          "insertions": 441,
+          "deletions": 1
+        }
+      },
+      "byKind": {
+        "draft": {
+          "commits": 1,
+          "insertions": 411,
+          "deletions": 0
+        },
+        "implement": {
+          "commits": 1,
+          "insertions": 1606,
+          "deletions": 61
+        },
+        "other": {
+          "commits": 1,
+          "insertions": 21,
+          "deletions": 2
+        }
+      },
+      "snapshot": {
+        "productionFiles": 23,
+        "productionLines": 313,
+        "testFiles": 9,
+        "testLines": 507,
+        "generatedFiles": 25,
+        "generatedLines": 864,
+        "specFiles": 15,
+        "specLines": 529,
+        "adrFiles": 6,
+        "testMethods": 22,
+        "realizesAnchors": 14,
+        "verifiesAnchors": 18,
+        "concernsAnchors": 0
+      }
+    },
+    {
+      "increment": "STR-3",
+      "commits": [
+        {
+          "short": "4add9e9",
+          "subject": "docs: draft tentative-holds-with-expiry (STR-3)",
+          "date": "2026-08-11T15:28:12+02:00",
+          "kind": "draft",
+          "filesChanged": 5,
+          "insertions": 177,
+          "deletions": 0,
+          "byClass": {
+            "spec": {
+              "files": 5,
+              "insertions": 177,
+              "deletions": 0
+            }
+          }
+        },
+        {
+          "short": "5ba3acf",
+          "subject": "feat: implement tentative-holds-with-expiry (STR-3)",
+          "date": "2026-08-11T15:43:00+02:00",
+          "kind": "implement",
+          "filesChanged": 34,
+          "insertions": 826,
+          "deletions": 46,
+          "byClass": {
+            "other": {
+              "files": 1,
+              "insertions": 5,
+              "deletions": 4
+            },
+            "spec": {
+              "files": 2,
+              "insertions": 37,
+              "deletions": 8
+            },
+            "spec-scaffold": {
+              "files": 5,
+              "insertions": 37,
+              "deletions": 17
+            },
+            "generated": {
+              "files": 7,
+              "insertions": 140,
+              "deletions": 3
+            },
+            "production": {
+              "files": 12,
+              "insertions": 212,
+              "deletions": 5
+            },
+            "test": {
+              "files": 7,
+              "insertions": 395,
+              "deletions": 9
+            }
+          }
+        },
+        {
+          "short": "d7afcbe",
+          "subject": "fix: review (STR-3 tentative holds)",
+          "date": "2026-08-11T15:54:46+02:00",
+          "kind": "other",
+          "filesChanged": 1,
+          "insertions": 5,
+          "deletions": 1,
+          "byClass": {
+            "test": {
+              "files": 1,
+              "insertions": 5,
+              "deletions": 1
+            }
+          }
+        }
+      ],
+      "commitCount": 3,
+      "firstCommitAt": "2026-08-11T15:28:12+02:00",
+      "lastCommitAt": "2026-08-11T15:54:46+02:00",
+      "insertions": 1008,
+      "deletions": 47,
+      "byClass": {
+        "spec": {
+          "files": 7,
+          "insertions": 214,
+          "deletions": 8
+        },
+        "other": {
+          "files": 1,
+          "insertions": 5,
+          "deletions": 4
+        },
+        "spec-scaffold": {
+          "files": 5,
+          "insertions": 37,
+          "deletions": 17
+        },
+        "generated": {
+          "files": 7,
+          "insertions": 140,
+          "deletions": 3
+        },
+        "production": {
+          "files": 12,
+          "insertions": 212,
+          "deletions": 5
+        },
+        "test": {
+          "files": 8,
+          "insertions": 400,
+          "deletions": 10
+        }
+      },
+      "byKind": {
+        "draft": {
+          "commits": 1,
+          "insertions": 177,
+          "deletions": 0
+        },
+        "implement": {
+          "commits": 1,
+          "insertions": 826,
+          "deletions": 46
+        },
+        "other": {
+          "commits": 1,
+          "insertions": 5,
+          "deletions": 1
+        }
+      },
+      "snapshot": {
+        "productionFiles": 30,
+        "productionLines": 527,
+        "testFiles": 13,
+        "testLines": 901,
+        "generatedFiles": 29,
+        "generatedLines": 1005,
+        "specFiles": 20,
+        "specLines": 760,
+        "adrFiles": 6,
+        "testMethods": 43,
+        "realizesAnchors": 24,
+        "verifiesAnchors": 26,
+        "concernsAnchors": 0
+      }
+    },
+    {
+      "increment": "STR-4",
+      "commits": [
+        {
+          "short": "6d59bba",
+          "subject": "docs: draft owner-cancellation-and-release (STR-4)",
+          "date": "2026-08-11T15:57:56+02:00",
+          "kind": "draft",
+          "filesChanged": 3,
+          "insertions": 105,
+          "deletions": 0,
+          "byClass": {
+            "spec": {
+              "files": 3,
+              "insertions": 105,
+              "deletions": 0
+            }
+          }
+        },
+        {
+          "short": "14b27a3",
+          "subject": "feat: implement owner-cancellation-and-release (STR-4)",
+          "date": "2026-08-11T16:04:36+02:00",
+          "kind": "implement",
+          "filesChanged": 20,
+          "insertions": 292,
+          "deletions": 12,
+          "byClass": {
+            "other": {
+              "files": 1,
+              "insertions": 3,
+              "deletions": 3
+            },
+            "spec-scaffold": {
+              "files": 3,
+              "insertions": 17,
+              "deletions": 7
+            },
+            "generated": {
+              "files": 2,
+              "insertions": 4,
+              "deletions": 2
+            },
+            "production": {
+              "files": 10,
+              "insertions": 105,
+              "deletions": 0
+            },
+            "test": {
+              "files": 4,
+              "insertions": 163,
+              "deletions": 0
+            }
+          }
+        }
+      ],
+      "commitCount": 2,
+      "firstCommitAt": "2026-08-11T15:57:56+02:00",
+      "lastCommitAt": "2026-08-11T16:04:36+02:00",
+      "insertions": 397,
+      "deletions": 12,
+      "byClass": {
+        "spec": {
+          "files": 3,
+          "insertions": 105,
+          "deletions": 0
+        },
+        "other": {
+          "files": 1,
+          "insertions": 3,
+          "deletions": 3
+        },
+        "spec-scaffold": {
+          "files": 3,
+          "insertions": 17,
+          "deletions": 7
+        },
+        "generated": {
+          "files": 2,
+          "insertions": 4,
+          "deletions": 2
+        },
+        "production": {
+          "files": 10,
+          "insertions": 105,
+          "deletions": 0
+        },
+        "test": {
+          "files": 4,
+          "insertions": 163,
+          "deletions": 0
+        }
+      },
+      "byKind": {
+        "draft": {
+          "commits": 1,
+          "insertions": 105,
+          "deletions": 0
+        },
+        "implement": {
+          "commits": 1,
+          "insertions": 292,
+          "deletions": 12
+        }
+      },
+      "snapshot": {
+        "productionFiles": 34,
+        "productionLines": 636,
+        "testFiles": 14,
+        "testLines": 1065,
+        "generatedFiles": 29,
+        "generatedLines": 1007,
+        "specFiles": 23,
+        "specLines": 878,
+        "adrFiles": 6,
+        "testMethods": 52,
+        "realizesAnchors": 28,
+        "verifiesAnchors": 30,
+        "concernsAnchors": 0
+      }
+    },
+    {
+      "increment": "STR-5",
+      "commits": [
+        {
+          "short": "67a346d",
+          "subject": "docs: draft per-user-quota (STR-5)",
+          "date": "2026-08-11T16:13:53+02:00",
+          "kind": "draft",
+          "filesChanged": 3,
+          "insertions": 105,
+          "deletions": 0,
+          "byClass": {
+            "spec": {
+              "files": 3,
+              "insertions": 105,
+              "deletions": 0
+            }
+          }
+        },
+        {
+          "short": "75d4329",
+          "subject": "feat: implement per-user-quota (STR-5)",
+          "date": "2026-08-11T16:27:30+02:00",
+          "kind": "implement",
+          "filesChanged": 22,
+          "insertions": 429,
+          "deletions": 31,
+          "byClass": {
+            "other": {
+              "files": 1,
+              "insertions": 3,
+              "deletions": 3
+            },
+            "spec-scaffold": {
+              "files": 3,
+              "insertions": 17,
+              "deletions": 7
+            },
+            "spec": {
+              "files": 1,
+              "insertions": 17,
+              "deletions": 6
+            },
+            "generated": {
+              "files": 2,
+              "insertions": 4,
+              "deletions": 2
+            },
+            "production": {
+              "files": 9,
+              "insertions": 124,
+              "deletions": 5
+            },
+            "test": {
+              "files": 6,
+              "insertions": 264,
+              "deletions": 8
+            }
+          }
+        },
+        {
+          "short": "a8e4e49",
+          "subject": "fix: review (STR-5 per-user quota)",
+          "date": "2026-08-11T16:39:01+02:00",
+          "kind": "other",
+          "filesChanged": 1,
+          "insertions": 5,
+          "deletions": 2,
+          "byClass": {
+            "test": {
+              "files": 1,
+              "insertions": 5,
+              "deletions": 2
+            }
+          }
+        }
+      ],
+      "commitCount": 3,
+      "firstCommitAt": "2026-08-11T16:13:53+02:00",
+      "lastCommitAt": "2026-08-11T16:39:01+02:00",
+      "insertions": 539,
+      "deletions": 33,
+      "byClass": {
+        "spec": {
+          "files": 4,
+          "insertions": 122,
+          "deletions": 6
+        },
+        "other": {
+          "files": 1,
+          "insertions": 3,
+          "deletions": 3
+        },
+        "spec-scaffold": {
+          "files": 3,
+          "insertions": 17,
+          "deletions": 7
+        },
+        "generated": {
+          "files": 2,
+          "insertions": 4,
+          "deletions": 2
+        },
+        "production": {
+          "files": 9,
+          "insertions": 124,
+          "deletions": 5
+        },
+        "test": {
+          "files": 7,
+          "insertions": 269,
+          "deletions": 10
+        }
+      },
+      "byKind": {
+        "draft": {
+          "commits": 1,
+          "insertions": 105,
+          "deletions": 0
+        },
+        "implement": {
+          "commits": 1,
+          "insertions": 429,
+          "deletions": 31
+        },
+        "other": {
+          "commits": 1,
+          "insertions": 5,
+          "deletions": 2
+        }
+      },
+      "snapshot": {
+        "productionFiles": 37,
+        "productionLines": 758,
+        "testFiles": 15,
+        "testLines": 1325,
+        "generatedFiles": 29,
+        "generatedLines": 1009,
+        "specFiles": 26,
+        "specLines": 1007,
+        "adrFiles": 6,
+        "testMethods": 66,
+        "realizesAnchors": 29,
+        "verifiesAnchors": 33,
+        "concernsAnchors": 0
+      }
+    },
+    {
+      "increment": "STR-6",
+      "commits": [
+        {
+          "short": "4a798d4",
+          "subject": "demo(str-6): reveal the multi-item redesign requirement",
+          "date": "2026-08-01T10:15:49+02:00",
+          "kind": "other",
+          "filesChanged": 1,
+          "insertions": 50,
+          "deletions": 0,
+          "byClass": {
+            "other": {
+              "files": 1,
+              "insertions": 50,
+              "deletions": 0
+            }
+          }
+        },
+        {
+          "short": "3dcd88b",
+          "subject": "docs: draft atomic-multi-item-bookings (STR-6)",
+          "date": "2026-08-11T16:46:35+02:00",
+          "kind": "draft",
+          "filesChanged": 5,
+          "insertions": 214,
+          "deletions": 0,
+          "byClass": {
+            "spec": {
+              "files": 5,
+              "insertions": 214,
+              "deletions": 0
+            }
+          }
+        },
+        {
+          "short": "70b5067",
+          "subject": "feat: implement atomic-multi-item-bookings (STR-6)",
+          "date": "2026-08-11T17:04:47+02:00",
+          "kind": "implement",
+          "filesChanged": 29,
+          "insertions": 584,
+          "deletions": 80,
+          "byClass": {
+            "other": {
+              "files": 1,
+              "insertions": 5,
+              "deletions": 5
+            },
+            "adr": {
+              "files": 1,
+              "insertions": 51,
+              "deletions": 0
+            },
+            "spec-scaffold": {
+              "files": 6,
+              "insertions": 39,
+              "deletions": 16
+            },
+            "spec": {
+              "files": 2,
+              "insertions": 38,
+              "deletions": 6
+            },
+            "generated": {
+              "files": 4,
+              "insertions": 8,
+              "deletions": 4
+            },
+            "production": {
+              "files": 10,
+              "insertions": 143,
+              "deletions": 29
+            },
+            "test": {
+              "files": 5,
+              "insertions": 300,
+              "deletions": 20
+            }
+          }
+        },
+        {
+          "short": "ed04b10",
+          "subject": "fix: review (STR-6 multi-item redesign (blind))",
+          "date": "2026-08-11T17:13:06+02:00",
+          "kind": "other",
+          "filesChanged": 3,
+          "insertions": 16,
+          "deletions": 3,
+          "byClass": {
+            "production": {
+              "files": 1,
+              "insertions": 2,
+              "deletions": 0
+            },
+            "test": {
+              "files": 2,
+              "insertions": 14,
+              "deletions": 3
+            }
+          }
+        }
+      ],
+      "commitCount": 4,
+      "firstCommitAt": "2026-08-01T10:15:49+02:00",
+      "lastCommitAt": "2026-08-11T17:13:06+02:00",
+      "insertions": 864,
+      "deletions": 83,
+      "byClass": {
+        "other": {
+          "files": 2,
+          "insertions": 55,
+          "deletions": 5
+        },
+        "spec": {
+          "files": 7,
+          "insertions": 252,
+          "deletions": 6
+        },
+        "adr": {
+          "files": 1,
+          "insertions": 51,
+          "deletions": 0
+        },
+        "spec-scaffold": {
+          "files": 6,
+          "insertions": 39,
+          "deletions": 16
+        },
+        "generated": {
+          "files": 4,
+          "insertions": 8,
+          "deletions": 4
+        },
+        "production": {
+          "files": 11,
+          "insertions": 145,
+          "deletions": 29
+        },
+        "test": {
+          "files": 7,
+          "insertions": 314,
+          "deletions": 23
+        }
+      },
+      "byKind": {
+        "other": {
+          "commits": 2,
+          "insertions": 66,
+          "deletions": 3
+        },
+        "draft": {
+          "commits": 1,
+          "insertions": 214,
+          "deletions": 0
+        },
+        "implement": {
+          "commits": 1,
+          "insertions": 584,
+          "deletions": 80
+        }
+      },
+      "snapshot": {
+        "productionFiles": 38,
+        "productionLines": 875,
+        "testFiles": 15,
+        "testLines": 1616,
+        "generatedFiles": 29,
+        "generatedLines": 1013,
+        "specFiles": 31,
+        "specLines": 1278,
+        "adrFiles": 7,
+        "testMethods": 83,
+        "realizesAnchors": 32,
+        "verifiesAnchors": 48,
+        "concernsAnchors": 0
+      }
+    }
+  ],
+  "final": {
+    "productionFiles": 38,
+    "productionLines": 875,
+    "testFiles": 15,
+    "testLines": 1616,
+    "generatedFiles": 29,
+    "generatedLines": 1013,
+    "specFiles": 31,
+    "specLines": 1278,
+    "adrFiles": 7,
+    "testMethods": 83,
+    "realizesAnchors": 32,
+    "verifiesAnchors": 48,
+    "concernsAnchors": 0
+  },
+  "coverage": {
+    "linesMissed": 0,
+    "linesCovered": 218,
+    "linePercent": 100
+  }
+}

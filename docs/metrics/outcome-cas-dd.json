@@ -1,0 +1,54 @@
+{
+ "label": "cas-dd",
+ "arm": "cas-dd",
+ "incrementsAttempted": 6,
+ "incrementsCompleted": 6,
+ "allGreen": true,
+ "finalTestsPassing": 88,
+ "finalSpecsCovered": 25,
+ "confirmedFindings": 8,
+ "anchorFindings": 12,
+ "confirmedAnchorFindings": 7,
+ "reviewerAnchorFindings": 2,
+ "confirmedReviewerAnchorFindings": 1,
+ "confirmedUnfixedFindings": 2,
+ "storiesClosed": 5,
+ "perIncrement": [
+  {
+   "increment": "STR-1 — scaffold clew, install governance, and stand up the reservations workspace",
+   "green": true,
+   "testsPassing": 4,
+   "specsCovered": 0
+  },
+  {
+   "increment": "STR-2 — reserve a single item for a time window",
+   "green": true,
+   "testsPassing": 26,
+   "specsCovered": 13
+  },
+  {
+   "increment": "STR-3 — tentative holds with expiry",
+   "green": true,
+   "testsPassing": 49,
+   "specsCovered": 17
+  },
+  {
+   "increment": "STR-4 — owner-initiated cancellation and release",
+   "green": true,
+   "testsPassing": 58,
+   "specsCovered": 19
+  },
+  {
+   "increment": "STR-5 — per-user fair-use quota",
+   "green": true,
+   "testsPassing": 72,
+   "specsCovered": 21
+  },
+  {
+   "increment": "STR-6 — atomic multi-item bookings (the blind redesign)",
+   "green": true,
+   "testsPassing": 88,
+   "specsCovered": 25
+  }
+ ]
+}
