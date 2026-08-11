@@ -5,6 +5,7 @@ import clew.traceables.clew.annotation.RealizesArch;
 import io.example.reservations.entities.Hold;
 import io.example.reservations.entities.Item;
 import io.example.reservations.entities.Reservation;
+import io.example.reservations.entities.User;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,6 +25,22 @@ public final class InMemoryReservationStore implements ReservationStore {
     @Override
     public synchronized List<Hold> holdsFor(Item item) {
         return List.copyOf(holdsByItem.getOrDefault(item, List.of()));
+    }
+
+    @Override
+    public synchronized List<Reservation> reservationsOwnedBy(User user) {
+        return reservationsByItem.values().stream()
+                .flatMap(List::stream)
+                .filter(reservation -> reservation.user().equals(user))
+                .toList();
+    }
+
+    @Override
+    public synchronized List<Hold> holdsOwnedBy(User user) {
+        return holdsByItem.values().stream()
+                .flatMap(List::stream)
+                .filter(hold -> hold.user().equals(user))
+                .toList();
     }
 
     @Override

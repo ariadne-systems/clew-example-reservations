@@ -1,10 +1,10 @@
 {
   "sequences": {
-    "STR": 4,
+    "STR": 5,
     "STK": 1,
     "SYS": 4,
-    "SW": 3,
-    "CON": 2,
+    "SW": 4,
+    "CON": 3,
     "ARCH": 3,
     "ENT": 5,
     "NF": 1

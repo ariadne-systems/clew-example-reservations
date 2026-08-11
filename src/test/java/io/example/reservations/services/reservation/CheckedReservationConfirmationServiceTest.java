@@ -2,6 +2,7 @@ package io.example.reservations.services.reservation;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -18,6 +19,8 @@ import io.example.reservations.entities.Reservation;
 import io.example.reservations.entities.TimeWindow;
 import io.example.reservations.entities.User;
 import io.example.reservations.services.availability.AvailabilityService;
+import io.example.reservations.services.quota.QuotaExceededException;
+import io.example.reservations.services.quota.QuotaService;
 import io.example.reservations.store.ReservationStore;
 import java.time.Instant;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,11 +44,15 @@ class CheckedReservationConfirmationServiceTest {
     @Mock
     private ReservationStore reservationStoreMock;
 
+    @Mock
+    private QuotaService quotaServiceMock;
+
     private CheckedReservationConfirmationService confirmationService;
 
     @BeforeEach
     void beforeEach() {
-        confirmationService = new CheckedReservationConfirmationService(availabilityServiceMock, reservationStoreMock);
+        confirmationService = new CheckedReservationConfirmationService(availabilityServiceMock, quotaServiceMock,
+                reservationStoreMock);
     }
 
     @Test
@@ -81,6 +88,16 @@ class CheckedReservationConfirmationServiceTest {
 
         verify(reservationStoreMock, times(1)).record(new Reservation(ALICE, MEETING_ROOM, TEN_TO_ELEVEN));
         verifyNoMoreInteractions(reservationStoreMock);
+    }
+
+    @Test
+    void a_confirmation_the_quota_service_refuses_leaves_no_trace_in_the_store() {
+        when(availabilityServiceMock.isAvailable(MEETING_ROOM, TEN_TO_ELEVEN)).thenReturn(true);
+        doThrow(new QuotaExceededException("over quota")).when(quotaServiceMock).requireHeadroomFor(ALICE);
+
+        assertThatThrownBy(() -> confirmationService.confirm(ALICE, MEETING_ROOM, TEN_TO_ELEVEN))
+                .isInstanceOf(QuotaExceededException.class);
+        verifyNoInteractions(reservationStoreMock);
     }
 
     @Test

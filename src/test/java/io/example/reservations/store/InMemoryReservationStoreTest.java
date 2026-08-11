@@ -13,11 +13,14 @@ import org.junit.jupiter.api.Test;
 class InMemoryReservationStoreTest {
 
     private static final User ALICE = new User("alice");
+    private static final User BOB = new User("bob");
     private static final Item MEETING_ROOM = new Item("room-1");
     private static final Item WORKSHOP = new Item("room-2");
     private static final Instant HALF_PAST_NINE = Instant.parse("2026-03-01T09:30:00Z");
     private static final TimeWindow TEN_TO_ELEVEN =
             new TimeWindow(Instant.parse("2026-03-01T10:00:00Z"), Instant.parse("2026-03-01T11:00:00Z"));
+    private static final TimeWindow ELEVEN_TO_TWELVE =
+            new TimeWindow(Instant.parse("2026-03-01T11:00:00Z"), Instant.parse("2026-03-01T12:00:00Z"));
 
     private final InMemoryReservationStore reservationStore = new InMemoryReservationStore();
 
@@ -90,6 +93,27 @@ class InMemoryReservationStoreTest {
         reservationStore.remove(new Hold(ALICE, WORKSHOP, TEN_TO_ELEVEN, HALF_PAST_NINE));
 
         assertThat(reservationStore.reservationsFor(MEETING_ROOM)).containsExactly(reservation);
+    }
+
+    @Test
+    void the_claims_owned_by_a_user_are_gathered_across_every_item_and_exclude_other_users_claims() {
+        Reservation aliceInTheMeetingRoom = new Reservation(ALICE, MEETING_ROOM, TEN_TO_ELEVEN);
+        Hold aliceInTheWorkshop = new Hold(ALICE, WORKSHOP, TEN_TO_ELEVEN, HALF_PAST_NINE);
+        reservationStore.record(aliceInTheMeetingRoom);
+        reservationStore.record(aliceInTheWorkshop);
+        reservationStore.record(new Reservation(BOB, WORKSHOP, ELEVEN_TO_TWELVE));
+        reservationStore.record(new Hold(BOB, MEETING_ROOM, ELEVEN_TO_TWELVE, HALF_PAST_NINE));
+
+        assertThat(reservationStore.reservationsOwnedBy(ALICE)).containsExactly(aliceInTheMeetingRoom);
+        assertThat(reservationStore.holdsOwnedBy(ALICE)).containsExactly(aliceInTheWorkshop);
+    }
+
+    @Test
+    void a_user_with_no_claims_owns_no_reservations_and_no_holds() {
+        reservationStore.record(new Reservation(BOB, MEETING_ROOM, TEN_TO_ELEVEN));
+
+        assertThat(reservationStore.reservationsOwnedBy(ALICE)).isEmpty();
+        assertThat(reservationStore.holdsOwnedBy(ALICE)).isEmpty();
     }
 
     @Test

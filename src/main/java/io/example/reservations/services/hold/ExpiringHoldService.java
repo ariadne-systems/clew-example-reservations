@@ -13,6 +13,7 @@ import io.example.reservations.entities.Reservation;
 import io.example.reservations.entities.TimeWindow;
 import io.example.reservations.entities.User;
 import io.example.reservations.services.availability.AvailabilityService;
+import io.example.reservations.services.quota.QuotaService;
 import io.example.reservations.services.reservation.ItemUnavailableException;
 import io.example.reservations.services.reservation.NotClaimOwnerException;
 import io.example.reservations.store.ReservationStore;
@@ -21,20 +22,23 @@ import java.time.Instant;
 public final class ExpiringHoldService implements HoldService {
 
     private final AvailabilityService availabilityService;
+    private final QuotaService quotaService;
     private final ReservationStore reservationStore;
     private final Clock clock;
 
     public ExpiringHoldService(AvailabilityService availabilityService,
+                               QuotaService quotaService,
                                ReservationStore reservationStore,
                                Clock clock) {
         this.availabilityService = availabilityService;
+        this.quotaService = quotaService;
         this.reservationStore = reservationStore;
         this.clock = clock;
     }
 
     @Override
     @RealizesSw(SwTraceables.SW_002_HOLD_SERVICE)
-    @RealizesCon(ConTraceables.CON_001_NO_DOUBLE_BOOKING)
+    @RealizesCon({ConTraceables.CON_001_NO_DOUBLE_BOOKING, ConTraceables.CON_003_QUOTA_BOUND})
     public Hold place(User user, Item item, TimeWindow window, Instant expiresAt) {
         if (!expiresAt.isAfter(clock.now())) {
             throw new IllegalArgumentException("A hold must expire after the current instant, but expiry was %s at %s"
@@ -44,6 +48,7 @@ public final class ExpiringHoldService implements HoldService {
             throw new ItemUnavailableException(
                     "Item %s is not available for [%s, %s)".formatted(item.id(), window.start(), window.end()));
         }
+        quotaService.requireHeadroomFor(user);
         Hold hold = new Hold(user, item, window, expiresAt);
         reservationStore.record(hold);
         return hold;

@@ -5,6 +5,7 @@ import io.example.reservations.clock.Clock;
 import io.example.reservations.clock.SystemClock;
 import io.example.reservations.services.availability.ComputedAvailabilityService;
 import io.example.reservations.services.hold.ExpiringHoldService;
+import io.example.reservations.services.quota.ClaimCountingQuotaService;
 import io.example.reservations.services.reservation.CheckedReservationConfirmationService;
 import io.example.reservations.services.reservation.OwnerCheckedReservationCancellationService;
 import io.example.reservations.store.InMemoryReservationStore;
@@ -23,10 +24,11 @@ public final class Reservations {
         ReservationStore reservationStore = new InMemoryReservationStore();
         ComputedAvailabilityService availabilityService =
                 new ComputedAvailabilityService(reservationStore, clock);
+        ClaimCountingQuotaService quotaService = new ClaimCountingQuotaService(reservationStore, clock);
         return new ReservationEngine(
-                new CheckedReservationConfirmationService(availabilityService, reservationStore),
+                new CheckedReservationConfirmationService(availabilityService, quotaService, reservationStore),
                 new OwnerCheckedReservationCancellationService(reservationStore),
-                new ExpiringHoldService(availabilityService, reservationStore, clock),
+                new ExpiringHoldService(availabilityService, quotaService, reservationStore, clock),
                 availabilityService);
     }
 }

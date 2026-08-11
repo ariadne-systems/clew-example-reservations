@@ -3,7 +3,7 @@ Quota-service rejects a hold or confirmation that would exceed the user's active
 
 **Lens**: SW
 
-**Status**: planned
+**Status**: active
 
 **Description**
 Before a hold is placed or a reservation confirmed, the service counts the user's active item claims — held items
@@ -22,8 +22,13 @@ or expiry brings a user back under quota.
 
 **Realizes**
 
-- [CON-TMP-001](CON-TMP-001-quota-bound.md)
+- [CON-003](CON-003-quota-bound.md)
 
 **Related**
 
 - [ENT-003](ENT-003-user.md)
+
+## Changes
+
+- **2026-08-11** — Set active: work on STR-005 (per-user fair-use quota) began.
+The spec is being built now, so it must generate a traceable for the implementation and its test to anchor against.

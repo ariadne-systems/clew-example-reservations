@@ -2,6 +2,7 @@ package io.example.reservations.services.hold;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -17,6 +18,8 @@ import io.example.reservations.entities.Reservation;
 import io.example.reservations.entities.TimeWindow;
 import io.example.reservations.entities.User;
 import io.example.reservations.services.availability.AvailabilityService;
+import io.example.reservations.services.quota.QuotaExceededException;
+import io.example.reservations.services.quota.QuotaService;
 import io.example.reservations.services.reservation.ItemUnavailableException;
 import io.example.reservations.services.reservation.NotClaimOwnerException;
 import io.example.reservations.store.ReservationStore;
@@ -48,13 +51,16 @@ class ExpiringHoldServiceTest {
     @Mock
     private ReservationStore reservationStoreMock;
 
+    @Mock
+    private QuotaService quotaServiceMock;
+
     private MutableClock clock;
     private ExpiringHoldService holdService;
 
     @BeforeEach
     void beforeEach() {
         clock = new MutableClock(TEN);
-        holdService = new ExpiringHoldService(availabilityServiceMock, reservationStoreMock, clock);
+        holdService = new ExpiringHoldService(availabilityServiceMock, quotaServiceMock, reservationStoreMock, clock);
     }
 
     @Test
@@ -96,6 +102,16 @@ class ExpiringHoldServiceTest {
 
         assertThatThrownBy(() -> holdService.place(ALICE, MEETING_ROOM, TEN_TO_ELEVEN, HALF_PAST_TEN))
                 .isInstanceOf(ItemUnavailableException.class);
+        verifyNoInteractions(reservationStoreMock);
+    }
+
+    @Test
+    void a_hold_the_quota_service_refuses_is_rejected_and_leaves_no_trace_in_the_store() {
+        when(availabilityServiceMock.isAvailable(MEETING_ROOM, TEN_TO_ELEVEN)).thenReturn(true);
+        doThrow(new QuotaExceededException("over quota")).when(quotaServiceMock).requireHeadroomFor(ALICE);
+
+        assertThatThrownBy(() -> holdService.place(ALICE, MEETING_ROOM, TEN_TO_ELEVEN, HALF_PAST_TEN))
+                .isInstanceOf(QuotaExceededException.class);
         verifyNoInteractions(reservationStoreMock);
     }
 

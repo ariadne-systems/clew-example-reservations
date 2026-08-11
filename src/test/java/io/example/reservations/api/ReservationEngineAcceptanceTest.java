@@ -20,6 +20,7 @@ import io.example.reservations.entities.TimeWindow;
 import io.example.reservations.entities.User;
 import io.example.reservations.services.hold.ExpiredHoldException;
 import io.example.reservations.services.hold.UnknownHoldException;
+import io.example.reservations.services.quota.QuotaExceededException;
 import io.example.reservations.services.reservation.ItemUnavailableException;
 import io.example.reservations.services.reservation.NotClaimOwnerException;
 import java.time.Instant;
@@ -30,8 +31,10 @@ class ReservationEngineAcceptanceTest {
 
     private static final User ALICE = new User("alice");
     private static final User BOB = new User("bob");
+    private static final User CARLA_ON_A_QUOTA_OF_TWO = new User("carla", 2);
     private static final Item MEETING_ROOM = new Item("room-1");
     private static final Item WORKSHOP = new Item("room-2");
+    private static final Item LIBRARY = new Item("room-3");
     private static final Instant NINE = Instant.parse("2026-03-01T09:00:00Z");
     private static final Instant HALF_PAST_NINE = Instant.parse("2026-03-01T09:30:00Z");
     private static final Instant TEN = Instant.parse("2026-03-01T10:00:00Z");
@@ -215,6 +218,55 @@ class ReservationEngineAcceptanceTest {
         assertThat(reservationEngine.isAvailable(MEETING_ROOM, HALF_PAST_TEN_TO_TWELVE)).isTrue();
         assertThat(reservationEngine.confirm(BOB, MEETING_ROOM, TEN_TO_ELEVEN))
                 .isEqualTo(new Reservation(BOB, MEETING_ROOM, TEN_TO_ELEVEN));
+    }
+
+    @Test
+    @VerifiesCon(ConTraceables.CON_003_QUOTA_BOUND)
+    void a_users_held_and_reserved_items_never_exceed_its_quota_across_place_confirm_release_cancel_and_expiry() {
+        Hold heldMeetingRoom =
+                reservationEngine.placeHold(CARLA_ON_A_QUOTA_OF_TWO, MEETING_ROOM, TEN_TO_ELEVEN, HALF_PAST_NINE);
+        Reservation reservedWorkshop = reservationEngine.confirm(CARLA_ON_A_QUOTA_OF_TWO, WORKSHOP, TEN_TO_ELEVEN);
+
+        assertThatThrownBy(() -> reservationEngine.placeHold(CARLA_ON_A_QUOTA_OF_TWO, LIBRARY, TEN_TO_ELEVEN,
+                HALF_PAST_NINE))
+                .isInstanceOf(QuotaExceededException.class);
+        assertThatThrownBy(() -> reservationEngine.confirm(CARLA_ON_A_QUOTA_OF_TWO, LIBRARY, TEN_TO_ELEVEN))
+                .isInstanceOf(QuotaExceededException.class);
+        assertThat(reservationEngine.isAvailable(LIBRARY, TEN_TO_ELEVEN)).isTrue();
+
+        assertThat(reservationEngine.confirmHold(heldMeetingRoom))
+                .isEqualTo(new Reservation(CARLA_ON_A_QUOTA_OF_TWO, MEETING_ROOM, TEN_TO_ELEVEN));
+        assertThatThrownBy(() -> reservationEngine.confirm(CARLA_ON_A_QUOTA_OF_TWO, LIBRARY, TEN_TO_ELEVEN))
+                .isInstanceOf(QuotaExceededException.class);
+
+        reservationEngine.cancel(CARLA_ON_A_QUOTA_OF_TWO, reservedWorkshop);
+        Hold heldLibrary =
+                reservationEngine.placeHold(CARLA_ON_A_QUOTA_OF_TWO, LIBRARY, TEN_TO_ELEVEN, HALF_PAST_NINE);
+
+        assertThatThrownBy(() -> reservationEngine.confirm(CARLA_ON_A_QUOTA_OF_TWO, WORKSHOP, TEN_TO_ELEVEN))
+                .isInstanceOf(QuotaExceededException.class);
+
+        reservationEngine.release(CARLA_ON_A_QUOTA_OF_TWO, heldLibrary);
+        reservationEngine.placeHold(CARLA_ON_A_QUOTA_OF_TWO, LIBRARY, TEN_TO_ELEVEN, HALF_PAST_NINE);
+
+        assertThatThrownBy(() -> reservationEngine.confirm(CARLA_ON_A_QUOTA_OF_TWO, WORKSHOP, TEN_TO_ELEVEN))
+                .isInstanceOf(QuotaExceededException.class);
+
+        clock.setTo(HALF_PAST_NINE);
+
+        assertThat(reservationEngine.confirm(CARLA_ON_A_QUOTA_OF_TWO, WORKSHOP, TEN_TO_ELEVEN))
+                .isEqualTo(new Reservation(CARLA_ON_A_QUOTA_OF_TWO, WORKSHOP, TEN_TO_ELEVEN));
+    }
+
+    @Test
+    void one_users_quota_does_not_bound_another_users_claims() {
+        reservationEngine.confirm(CARLA_ON_A_QUOTA_OF_TWO, MEETING_ROOM, TEN_TO_ELEVEN);
+        reservationEngine.confirm(CARLA_ON_A_QUOTA_OF_TWO, WORKSHOP, TEN_TO_ELEVEN);
+
+        assertThatThrownBy(() -> reservationEngine.confirm(CARLA_ON_A_QUOTA_OF_TWO, LIBRARY, TEN_TO_ELEVEN))
+                .isInstanceOf(QuotaExceededException.class);
+        assertThat(reservationEngine.confirm(ALICE, LIBRARY, TEN_TO_ELEVEN))
+                .isEqualTo(new Reservation(ALICE, LIBRARY, TEN_TO_ELEVEN));
     }
 
     @Test

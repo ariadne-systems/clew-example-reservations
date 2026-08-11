@@ -1,7 +1,7 @@
 **Title**
 Per-user fair-use quota
 
-**Status**: planned
+**Status**: done
 
 **Business Value**
 No single user can monopolise the items: a per-user quota bounds how much anyone may hold and reserve at once, so
@@ -39,8 +39,8 @@ Record the change in ENT-003's `## Changes` section, stating when and why.
 
 **Realizes**
 
-- [CON-TMP-001](../specs/CON-TMP-001-quota-bound.md)
-- [SW-TMP-001](../specs/SW-TMP-001-quota-service.md)
+- [CON-003](../specs/CON-003-quota-bound.md)
+- [SW-004](../specs/SW-004-quota-service.md)
 
 **Related**
 

@@ -3,7 +3,7 @@ A user's active item claims never exceed its quota
 
 **Lens**: CON
 
-**Status**: planned
+**Status**: active
 
 **Description**
 At no point may a user's active item claims — held items from active holds plus reserved items from confirmed
@@ -24,4 +24,9 @@ restores headroom — across a sequence of operations, not only at a single step
 **Related**
 
 - [ENT-003](ENT-003-user.md)
-- [SW-TMP-001](SW-TMP-001-quota-service.md)
+- [SW-004](SW-004-quota-service.md)
+
+## Changes
+
+- **2026-08-11** — Set active: work on STR-005 (per-user fair-use quota) began.
+The spec is being built now, so it must generate a traceable for the implementation and its test to anchor against.
