@@ -21,7 +21,7 @@ a `{…}` list from a set's enum; to anchor across sets, add each set's annotati
 ## Example
 
 ```java
-@RealizesYourSet(YourSetTraceables.YOUR_SPEC_ID)
+@RealizesArch(ArchTraceables.ARCH_001_STATE_CHANGE_THROUGH_STORE)
 void mint() {}
 ```
 

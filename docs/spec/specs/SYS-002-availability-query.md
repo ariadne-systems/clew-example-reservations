@@ -1,0 +1,34 @@
+**Title**
+The engine reports availability computed from reservations, never from stored state
+
+**Lens**: SYS
+
+**Status**: active
+
+**Description**
+The engine reports whether an item is available for a window, computed from the confirmed reservations that bear on
+that window rather than from any stored availability state.
+
+**Rationale**
+A stored availability flag would be a second source of truth that can drift from the reservations it summarizes and
+would have to be kept in sync on every change; deriving it on demand keeps the reservations the
+single source of truth (ADR-0003).
+
+**Verification Description**
+A test asserts an item is available for a window until a confirmed reservation covers an overlapping window, then
+unavailable — availability computed on demand, with no availability state persisted.
+
+## Relations
+
+**Realizes**
+
+- [STK-001](STK-001-no-double-booking.md)
+
+**Related**
+
+- [ENT-002](ENT-002-time-window.md)
+
+## Changes
+
+- **2026-08-11** — Set active: work on STR-002 (reserve a single item for a time window) began.
+The spec is being built now, so it must generate a traceable for the implementation and its test to anchor against.
