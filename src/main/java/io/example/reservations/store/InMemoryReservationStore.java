@@ -31,9 +31,11 @@ public final class InMemoryReservationStore implements ReservationStore {
 
     @Override
     public synchronized List<Reservation> reservationsOwnedBy(User user) {
+        // A reservation is indexed under each of its items, so the flattened view repeats a multi-item one.
         return reservationsByItem.values().stream()
                 .flatMap(List::stream)
                 .filter(reservation -> reservation.user().equals(user))
+                .distinct()
                 .toList();
     }
 

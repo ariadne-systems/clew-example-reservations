@@ -138,6 +138,14 @@ class InMemoryReservationStoreTest {
     }
 
     @Test
+    void a_multi_item_reservation_is_owned_once_however_many_items_it_covers() {
+        Reservation aliceInBothRooms = new Reservation(ALICE, Set.of(MEETING_ROOM, WORKSHOP), TEN_TO_ELEVEN);
+        reservationStore.record(aliceInBothRooms);
+
+        assertThat(reservationStore.reservationsOwnedBy(ALICE)).containsExactly(aliceInBothRooms);
+    }
+
+    @Test
     void a_user_with_no_claims_owns_no_reservations_and_no_holds() {
         reservationStore.record(new Reservation(BOB, MEETING_ROOM, TEN_TO_ELEVEN));
 

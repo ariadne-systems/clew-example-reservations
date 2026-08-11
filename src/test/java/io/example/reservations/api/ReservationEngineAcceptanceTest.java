@@ -43,6 +43,7 @@ class ReservationEngineAcceptanceTest {
     private static final User BOB = new User("bob");
     private static final User CARLA_ON_A_QUOTA_OF_TWO = new User("carla", 2);
     private static final User DEREK_ON_A_QUOTA_OF_ONE = new User("derek", 1);
+    private static final User ERIN_ON_A_QUOTA_OF_THREE = new User("erin", 3);
     private static final Item MEETING_ROOM = new Item("room-1");
     private static final Item WORKSHOP = new Item("room-2");
     private static final Item LIBRARY = new Item("room-3");
@@ -358,14 +359,16 @@ class ReservationEngineAcceptanceTest {
     @Test
     void confirming_the_items_a_user_already_holds_consumes_no_further_quota() {
         Hold heldMeetingRoom =
-                reservationEngine.placeHold(CARLA_ON_A_QUOTA_OF_TWO, MEETING_ROOM, TEN_TO_ELEVEN, HALF_PAST_NINE);
+                reservationEngine.placeHold(ERIN_ON_A_QUOTA_OF_THREE, MEETING_ROOM, TEN_TO_ELEVEN, HALF_PAST_NINE);
         Hold heldWorkshop =
-                reservationEngine.placeHold(CARLA_ON_A_QUOTA_OF_TWO, WORKSHOP, TEN_TO_ELEVEN, HALF_PAST_NINE);
+                reservationEngine.placeHold(ERIN_ON_A_QUOTA_OF_THREE, WORKSHOP, TEN_TO_ELEVEN, HALF_PAST_NINE);
 
         Reservation booking = reservationEngine.confirmHolds(List.of(heldMeetingRoom, heldWorkshop));
 
         assertThat(booking.items()).containsExactlyInAnyOrder(MEETING_ROOM, WORKSHOP);
-        assertThatThrownBy(() -> reservationEngine.confirm(CARLA_ON_A_QUOTA_OF_TWO, LIBRARY, TEN_TO_ELEVEN))
+        assertThat(reservationEngine.confirm(ERIN_ON_A_QUOTA_OF_THREE, LIBRARY, TEN_TO_ELEVEN).items())
+                .containsExactly(LIBRARY);
+        assertThatThrownBy(() -> reservationEngine.confirm(ERIN_ON_A_QUOTA_OF_THREE, LIBRARY, ELEVEN_TO_TWELVE))
                 .isInstanceOf(QuotaExceededException.class);
     }
 
