@@ -1,5 +1,10 @@
 package io.example.reservations.architecture;
 
+import static com.tngtech.archunit.core.domain.JavaCall.Predicates.target;
+import static com.tngtech.archunit.core.domain.JavaClass.Predicates.INTERFACES;
+import static com.tngtech.archunit.core.domain.JavaClass.Predicates.resideInAPackage;
+import static com.tngtech.archunit.core.domain.JavaClass.Predicates.resideInAnyPackage;
+import static com.tngtech.archunit.core.domain.properties.CanBeAnnotated.Predicates.annotatedWith;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.methods;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
@@ -37,10 +42,24 @@ class ArchitectureBoundariesTest {
                     .should().dependOnClassesThat().resideInAPackage("..store..");
 
     @ArchTest
-    @VerifiesArch(ArchTraceables.ARCH_001_STATE_CHANGE_THROUGH_STORE)
+    @VerifiesArch(ArchTraceables.ARCH_002_LAYERING)
+    static final ArchRule api_depends_only_on_service_interfaces_and_entities =
+            classes().that().resideInAPackage("..api..")
+                    .should().onlyDependOnClassesThat(
+                            resideInAnyPackage("..api..", "..entities..", "java..", "org.jspecify..",
+                                    "clew.traceables..")
+                                    .or(resideInAPackage("..services..").and(INTERFACES)));
+
+    @ArchTest
     static final ArchRule state_mutating_methods_are_declared_only_in_the_store =
             methods().that().areAnnotatedWith(MutatesState.class)
                     .should().beDeclaredInClassesThat().resideInAPackage("..store..");
+
+    @ArchTest
+    @VerifiesArch({ArchTraceables.ARCH_001_STATE_CHANGE_THROUGH_STORE, ArchTraceables.ARCH_002_LAYERING})
+    static final ArchRule only_the_store_calls_state_mutating_methods =
+            noClasses().that().resideOutsideOfPackage("..store..")
+                    .should().callMethodWhere(target(annotatedWith(MutatesState.class)));
 
     @ArchTest
     @VerifiesArch(ArchTraceables.ARCH_003_EVERY_PACKAGE_IS_NULL_MARKED)

@@ -20,6 +20,7 @@ public final class InMemoryReservationStore implements ReservationStore {
     }
 
     @Override
+    @MutatesState
     public synchronized void record(Reservation reservation) {
         reservationsByItem.computeIfAbsent(reservation.item(), reservedItem -> new ArrayList<>()).add(reservation);
     }

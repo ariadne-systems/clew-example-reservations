@@ -11,6 +11,5 @@ public interface ReservationStore {
 
     List<Reservation> reservationsFor(Item item);
 
-    @MutatesState
     void record(Reservation reservation);
 }
