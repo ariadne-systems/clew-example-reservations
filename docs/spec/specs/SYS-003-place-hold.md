@@ -3,7 +3,7 @@ The engine places a tentative hold that blocks availability until it expires or 
 
 **Lens**: SYS
 
-**Status**: planned
+**Status**: active
 
 **Description**
 The engine places a tentative hold on an available item for a window; while active the hold makes the item
@@ -28,6 +28,11 @@ clock past the expiry instant restores availability; a separate test confirms an
 **Related**
 
 - [SYS-002](SYS-002-availability-query.md)
-- [ENT-TMP-001](ENT-TMP-001-hold.md)
-- [NF-TMP-001](NF-TMP-001-deterministic-expiry.md)
-- [SW-TMP-001](SW-TMP-001-hold-service.md)
+- [ENT-005](ENT-005-hold.md)
+- [NF-001](NF-001-deterministic-expiry.md)
+- [SW-002](SW-002-hold-service.md)
+
+## Changes
+
+- **2026-08-11** — Set active: work on STR-003 (tentative holds with expiry) began.
+The spec is being built now, so it must generate a traceable for the implementation and its test to anchor against.

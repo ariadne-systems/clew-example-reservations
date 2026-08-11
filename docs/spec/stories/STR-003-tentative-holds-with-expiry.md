@@ -1,7 +1,7 @@
 **Title**
 Tentative holds with expiry
 
-**Status**: planned
+**Status**: done
 
 **Business Value**
 A user can reserve provisionally without blocking an item forever: a tentative hold gives them time to decide,
@@ -43,10 +43,10 @@ Record each change in that spec's `## Changes` section, stating when and why.
 
 **Realizes**
 
-- [SYS-TMP-001](../specs/SYS-TMP-001-place-hold.md)
-- [SW-TMP-001](../specs/SW-TMP-001-hold-service.md)
-- [ENT-TMP-001](../specs/ENT-TMP-001-hold.md)
-- [NF-TMP-001](../specs/NF-TMP-001-deterministic-expiry.md)
+- [SYS-003](../specs/SYS-003-place-hold.md)
+- [SW-002](../specs/SW-002-hold-service.md)
+- [ENT-005](../specs/ENT-005-hold.md)
+- [NF-001](../specs/NF-001-deterministic-expiry.md)
 
 **Related**
 

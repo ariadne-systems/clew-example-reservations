@@ -3,7 +3,7 @@ Hold-service places and expires holds through the store against the injected clo
 
 **Lens**: SW
 
-**Status**: planned
+**Status**: active
 
 **Description**
 The hold service places a hold on an item for a window by handing one atomic change to the store, and treats a hold
@@ -22,10 +22,15 @@ instant asserts the hold is inactive, with no reliance on real elapsed time.
 
 **Realizes**
 
-- [SYS-TMP-001](SYS-TMP-001-place-hold.md)
+- [SYS-003](SYS-003-place-hold.md)
 
 **Related**
 
-- [ENT-TMP-001](ENT-TMP-001-hold.md)
-- [NF-TMP-001](NF-TMP-001-deterministic-expiry.md)
+- [ENT-005](ENT-005-hold.md)
+- [NF-001](NF-001-deterministic-expiry.md)
 - [ARCH-001](ARCH-001-state-change-through-store.md)
+
+## Changes
+
+- **2026-08-11** — Set active: work on STR-003 (tentative holds with expiry) began.
+The spec is being built now, so it must generate a traceable for the implementation and its test to anchor against.

@@ -6,18 +6,17 @@
  * @clew homepage: https://ariadne-thread.io
  * @clew connector-type: req-as-code
  * @clew generator-type: java
- * @clew spec-set: SW
+ * @clew spec-set: NF
  */
 
 package clew.traceables.clew;
 
-public enum SwTraceables {
-  SW_001_CONFIRM_SERVICE("SW-001"),
-  SW_002_HOLD_SERVICE("SW-002");
+public enum NfTraceables {
+  NF_001_DETERMINISTIC_EXPIRY("NF-001");
 
   private final String id;
 
-  SwTraceables(String id) {
+  NfTraceables(String id) {
     this.id = id;
   }
 

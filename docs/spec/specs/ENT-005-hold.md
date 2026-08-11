@@ -3,7 +3,7 @@ A Hold is a tentative, expiring claim on an item for a window
 
 **Lens**: ENT
 
-**Status**: planned
+**Status**: active
 
 **Description**
 A Hold is a tentative claim placed by a user on an item for a time window, carrying an expiry instant.
@@ -29,4 +29,9 @@ and expired with the clock set exactly at, and after, the instant.
 - [ENT-002](ENT-002-time-window.md)
 - [ENT-003](ENT-003-user.md)
 - [ENT-004](ENT-004-reservation.md)
-- [NF-TMP-001](NF-TMP-001-deterministic-expiry.md)
+- [NF-001](NF-001-deterministic-expiry.md)
+
+## Changes
+
+- **2026-08-11** — Set active: work on STR-003 (tentative holds with expiry) began.
+The spec is being built now, so it must generate a traceable for the implementation and its test to anchor against.

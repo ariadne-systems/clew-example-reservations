@@ -3,7 +3,7 @@ Time-dependent behaviour is deterministic under the injected clock
 
 **Lens**: NF
 
-**Status**: planned
+**Status**: active
 
 **Description**
 Every time-dependent decision is evaluated against the injected clock, so behaviour is fully determined by clock
@@ -22,5 +22,10 @@ reliance on real elapsed time.
 
 **Related**
 
-- [ENT-TMP-001](ENT-TMP-001-hold.md)
+- [ENT-005](ENT-005-hold.md)
 - [SYS-002](SYS-002-availability-query.md)
+
+## Changes
+
+- **2026-08-11** — Set active: work on STR-003 (tentative holds with expiry) began.
+The spec is being built now, so it must generate a traceable for the implementation and its test to anchor against.

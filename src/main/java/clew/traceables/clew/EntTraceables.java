@@ -15,7 +15,8 @@ public enum EntTraceables {
   ENT_001_ITEM("ENT-001"),
   ENT_002_TIME_WINDOW("ENT-002"),
   ENT_003_USER("ENT-003"),
-  ENT_004_RESERVATION("ENT-004");
+  ENT_004_RESERVATION("ENT-004"),
+  ENT_005_HOLD("ENT-005");
 
   private final String id;
 
