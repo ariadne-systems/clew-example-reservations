@@ -1,7 +1,7 @@
 **Title**
 Set up the reservations workspace
 
-**Status**: planned
+**Status**: done
 
 **Business Value**
 A working, checkable skeleton is the ground every later increment builds on: the build compiles, the tests run, the
